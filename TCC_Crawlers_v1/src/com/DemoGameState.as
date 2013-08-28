@@ -245,6 +245,7 @@ package com
 			}
 		}
 		
+		//TODO substituir pelos inputs do Hero
 		protected function onKeyDown(event:KeyboardEvent):void
 		{
 			if(event.keyCode == citrus.input.controllers.Keyboard.Z){

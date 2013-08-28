@@ -73,6 +73,8 @@ package com
 			Keyboard.addKeyAction("_left", Keyboard.A);
 			Keyboard.addKeyAction("_down", Keyboard.S);
 			Keyboard.addKeyAction("_right", Keyboard.D);*/
+			/*_ce.input.keyboard.removeKeyActions(Keyboard.LEFT);
+			_ce.input.keyboard.addKeyAction("_left", Keyboard.A);*/
 		}
 		
 		private function drawInsanityBar():void
