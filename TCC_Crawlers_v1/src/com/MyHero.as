@@ -5,6 +5,7 @@ package com
 	import flash.display.Sprite;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
+	import flash.utils.setTimeout;
 	
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2World;
@@ -135,7 +136,10 @@ package com
 		
 		public function reset():void
 		{
-			(_ce.state as DemoGameState).delayer.push(resetRotation);
+			//(_ce.state as DemoGameState).delayer.push(resetRotation);
+			
+			setTimeout(resetRotation, 0);
+			
 			if(isInverted){
 				this.invert();
 			}

@@ -58,7 +58,7 @@ package com
 		private var spike1:Spike;
 		private var spike2:Spike;
 		
-		public var delayer:Vector.<Function> = new Vector.<Function>();
+		//public var delayer:Vector.<Function> = new Vector.<Function>();
 		private var sawRockTutorial:Boolean = false;
 		
 		
@@ -122,9 +122,6 @@ package com
 			
 			//LIBERA A ROTAÇÃO DA CAMERA
 			view.camera.allowRotation = true;
-			
-			//SETA UMA AÇÃO PARA UMA TECLA
-			_ce.input.keyboard.addKeyAction("rotate", citrus.input.controllers.Keyboard.X);
 			
 			hero.onGiveDamage.add(heroAttack);
 			hero.onTakeDamage.add(heroHurt);
@@ -224,14 +221,14 @@ package com
 					minutes++;
 				}
 				
-				if(delayer.length > 0)
+				/*if(delayer.length > 0)
 				{
 					var delayf:Function;
 					while(delayf = delayer.pop())
 					{
 						delayf();
 					}
-				}
+				}*/
 			}
 			//trace(view.camera.camPos);
 			
@@ -272,9 +269,6 @@ package com
 			}
 			if(event.keyCode == Keyboard.C){
 				hero.setWithTorch(true);
-			}
-			if(event.keyCode == Keyboard.A){
-				hero.x = 10
 			}
 		}
 		

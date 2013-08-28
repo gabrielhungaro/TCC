@@ -4,16 +4,18 @@ package com
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
 	import flash.net.URLRequest;
 	import flash.system.Security;
 	
 	import citrus.core.CitrusEngine;
+	import citrus.input.controllers.Keyboard;
 	
 	[SWF(width=550,height=400)]
 	public class TCC_Citrus_Test extends CitrusEngine
 	{
 		Security.allowDomain("*");
-		private var gameState:DemoGameState;
+		private var level1State:DemoGameState;
 		private var debugSprite:Sprite = new Sprite();
 		
 		[Embed(source="../../levels/level1.swf")]
@@ -26,26 +28,39 @@ package com
 			
 			this.console.addCommand("invert", invertAll);
 			
+			//TODO tirar essa merda daqui substituir pelo carregamento correto
 			var mc:Level1 = new Level1();
-			gameState = new DemoGameState(mc, debugSprite);
-			state = gameState;
+			level1State = new DemoGameState(mc, debugSprite);
+			state = level1State;
 			
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handlerLoadCompelete);
 			//loader.load(new URLRequest(level1));
+			
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			//this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		}
+		
+		protected function onKeyDown(event:KeyboardEvent):void
+		{
+			if(event.keyCode == citrus.input.controllers.Keyboard.Z){
+				//if(level1State.getIsInsane()){
+					invertAll();
+				//}
+			}
 		}
 		
 		protected function handlerLoadCompelete(event:Event):void
 		{
 			addChild(debugSprite);
 			var swfLoaded:MovieClip = event.target.loader.content as MovieClip;
-			gameState = new DemoGameState(swfLoaded, debugSprite);
-			state = gameState;
+			level1State = new DemoGameState(swfLoaded, debugSprite);
+			state = level1State;
 		}
 		
 		private function invertAll():void
 		{
-			gameState.invertAll();
+			level1State.invertAll();
 		}
 	}
 }
