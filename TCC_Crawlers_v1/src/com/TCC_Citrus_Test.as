@@ -1,11 +1,12 @@
 package com
 {
+	import com.levels.Level1State;
+	
 	import flash.display.Loader;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
-	import flash.net.URLRequest;
 	import flash.system.Security;
 	
 	import citrus.core.CitrusEngine;
@@ -15,7 +16,7 @@ package com
 	public class TCC_Citrus_Test extends CitrusEngine
 	{
 		Security.allowDomain("*");
-		private var level1State:DemoGameState;
+		private var level1State:Level1State;
 		private var debugSprite:Sprite = new Sprite();
 		
 		[Embed(source="../../levels/level1.swf")]
@@ -26,18 +27,18 @@ package com
 			sound.addSound("Hurt", "../sounds/Hurt.mp3");
 			sound.addSound("Kill", "../sounds/Kill.mp3");
 			
-			this.console.addCommand("invert", invertAll);
+			//this.console.addCommand("invert", invertAll);
 			
 			//TODO tirar essa merda daqui substituir pelo carregamento correto
 			var mc:Level1 = new Level1();
-			level1State = new DemoGameState(mc, debugSprite);
+			level1State = new Level1State(mc, debugSprite);
 			state = level1State;
 			
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handlerLoadCompelete);
 			//loader.load(new URLRequest(level1));
 			
-			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			//this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			//this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		}
 		
@@ -45,7 +46,7 @@ package com
 		{
 			if(event.keyCode == citrus.input.controllers.Keyboard.Z){
 				//if(level1State.getIsInsane()){
-					invertAll();
+					//invertAll();
 				//}
 			}
 		}
@@ -54,13 +55,8 @@ package com
 		{
 			addChild(debugSprite);
 			var swfLoaded:MovieClip = event.target.loader.content as MovieClip;
-			level1State = new DemoGameState(swfLoaded, debugSprite);
+			level1State = new Level1State(swfLoaded, debugSprite);
 			state = level1State;
-		}
-		
-		private function invertAll():void
-		{
-			level1State.invertAll();
 		}
 	}
 }

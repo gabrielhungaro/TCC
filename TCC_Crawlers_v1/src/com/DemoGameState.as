@@ -1,5 +1,7 @@
 package com
 {
+	import com.hero.HeroActions;
+	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.KeyboardEvent;
@@ -127,6 +129,13 @@ package com
 			hero.onTakeDamage.add(heroHurt);
 			
 			addTutorialScreen("Para movimentar o personagem use as setas do teclado, para pular use a barra de espaço. Cuidado com sua insanidade a barra a cima mostra o nível dela, quando ela chegar no máximo você morre, quando a insanidade atingir um nível de perigo e a barra ficar vermelha e você pode precionar a tecla 'Z' para rotacionar a tela");
+			
+			var keyboard:Keyboard = CitrusEngine.getInstance().input.keyboard as Keyboard;
+			//and here we can add the "fly" action to the keyboard, that will only be sent to channel 1.
+			keyboard.addKeyAction("fly", Keyboard.F);
+			keyboard.addKeyAction("left", Keyboard.A);
+			
+			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z);
 			
 			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);

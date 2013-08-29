@@ -1,5 +1,6 @@
 package com
 {
+	import com.hero.HeroActions;
 	import com.objects.Rock;
 	
 	import flash.display.Sprite;
@@ -11,12 +12,15 @@ package com
 	import Box2D.Dynamics.b2World;
 	import Box2D.Dynamics.Contacts.b2Contact;
 	
+	import citrus.core.CitrusEngine;
+	import citrus.core.State;
 	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
 	import citrus.objects.platformer.box2d.Hero;
 	import citrus.objects.platformer.box2d.Sensor;
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
+	import com.levels.Level;
 	
 	public class MyHero extends Hero
 	{
@@ -30,7 +34,7 @@ package com
 		private var _worldScale:Number;
 		private var _world:b2World;
 		private var withRock:Boolean = false;
-		private var _state:DemoGameState;
+		private var _state:Level;
 		private var fog:Fog;
 		private var isWithTorch:Boolean = false;
 		private var _camPos:Point;
@@ -125,9 +129,9 @@ package com
 			dirY = Math.sin(angleOfShoot) * 10;
 			
 			setWithRock(false);
-			_state.rock.x = 518;
-			_state.rock.y = 671;
-				
+			//TODO arrumar rock tirar do state
+			//_state.rock.x = 518;
+			//_state.rock.y = 671;
 			
 			/*ySpeed=Math.sin(angle) * maxSpeed;//calculate how much it should move the enemy vertically
 			xSpeed=Math.cos(angle) * maxSpeed;//calculate how much it should move the enemy horizontally
@@ -226,6 +230,33 @@ package com
 				var moveKeyPressed:Boolean = false;
 				
 				_ducking = (_ce.input.isDoing("duck", inputChannel) && _onGround && canDuck);
+				
+				if(_ce.input.justDid(HeroActions.INVERT, inputChannel) && isInsane)
+				{
+					trace("vou inverter");
+					if(this.rotation == 0){
+						this.rotation = 180;
+						isInverted = true;
+					}else{
+						this.rotation = 0;
+						isInverted = false;
+					}
+				}
+				
+				if(_ce.input.justDid("fly", inputChannel))
+				{
+					//insert "start flying" code here
+				}
+				
+				if(_ce.input.isDoing("fly", inputChannel))
+				{
+					//if you are using a controller such as a joystick and want to give more control to your player, you can use the new getActionValue method
+					var flying_intensity:Number = _ce.input.getActionValue("fly", inputChannel);
+					//and apply it.
+					velocity.y = - flying_intensity * 150; //this is just an example application, it might not be as accurate as you'd want it to.
+					
+					//insert other "flying" code here
+				}
 				
 				if (_ce.input.isDoing("right", inputChannel) && !_ducking)
 				{
@@ -341,7 +372,8 @@ package com
 		private function invert():void
 		{
 			insanity = 0;
-			_state.invertAll();
+			//TODO arrumar o invert e tirar do state
+			//_state.invertAll();
 		}
 		
 		public function setInverted(value:Boolean):void
@@ -370,7 +402,7 @@ package com
 			return withRock;
 		}
 		
-		public function setState(value:DemoGameState):void
+		public function setState(value:Level):void
 		{
 			_state = value;
 		}

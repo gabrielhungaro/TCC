@@ -1,20 +1,24 @@
-package com
+package com.levels
 {
+	import com.MyHero;
+	import com.Spike;
+	import com.hero.HeroActions;
+	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
 	import citrus.core.CitrusEngine;
-	import citrus.core.State;
+	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
+	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
 	import citrus.utils.objectmakers.ObjectMaker2D;
 	
-	public class Level1State extends State
+	public class Level1State extends Level
 	{
-		private var _levelSWF:MovieClip;
 		private var objectsArray:Array;
 		private var _debugSprite:Sprite;
 		private var hero:MyHero;
@@ -22,7 +26,7 @@ package com
 		public function Level1State(levelSWF:MovieClip, debugSprite:Sprite)
 		{
 			super();
-			_levelSWF = levelSWF;
+			this._levelSWF = levelSWF;
 			_debugSprite = debugSprite;
 			objectsArray = [Platform, Spike, MyHero]
 		}
@@ -30,15 +34,11 @@ package com
 		override public function initialize():void
 		{
 			super.initialize();
-			_ce = CitrusEngine.getInstance();
 			
-			box2D = new Box2D("box2D");
-			box2D.visible = false;
-			add(box2D);
-			
-			ObjectMaker2D.FromMovieClip(_levelSWF);
+			//ObjectMaker2D.FromMovieClip(_levelSWF);
 			
 			createHero();
+			setupHeroAction();
 			setUpCamera();
 		}
 		
@@ -55,10 +55,18 @@ package com
 		{
 			hero = getObjectByName("Hero") as MyHero;
 			hero.setState(this);
-			hero.setWorld(box2D.world);
-			hero.setWorldScale(box2D.scale);
+			hero.setWorld(this.box2D.world);
+			hero.setWorldScale(this.box2D.scale);
 			hero.setInitialPos(new Point(hero.x, hero.y))
 			hero.init();
+		}
+		
+		private function setupHeroAction():void
+		{
+			var keyboard:Keyboard = CitrusEngine.getInstance().input.keyboard as Keyboard;
+			keyboard.addKeyAction(HeroActions.LEFT, Keyboard.A);
+			keyboard.addKeyAction(HeroActions.RIGHT, Keyboard.D);
+			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z);
 		}
 	}
 }
