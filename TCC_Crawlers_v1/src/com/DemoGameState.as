@@ -26,6 +26,7 @@ package com
 	import citrus.physics.box2d.Box2D;
 	import citrus.utils.objectmakers.ObjectMaker2D;
 	import citrus.view.spriteview.SpriteArt;
+	import com.hero.MyHero;
 	
 	/**
 	 * @author GabrielHungaro

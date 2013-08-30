@@ -1,8 +1,10 @@
-package com
+package com.hero
 {
-	import com.hero.HeroActions;
+	import com.Fog;
+	import com.levels.Level;
 	import com.objects.Rock;
 	
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
@@ -20,7 +22,7 @@ package com
 	import citrus.objects.platformer.box2d.Sensor;
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
-	import com.levels.Level;
+	import citrus.view.spriteview.SpriteArt;
 	
 	public class MyHero extends Hero
 	{
@@ -73,12 +75,18 @@ package com
 			_ce.addChild(fog);
 			drawInsanityBar();
 			arrayOfRocks = new Vector.<Rock>;
-			/*Keyboard.addKeyAction("_up", Keyboard.W);
-			Keyboard.addKeyAction("_left", Keyboard.A);
-			Keyboard.addKeyAction("_down", Keyboard.S);
-			Keyboard.addKeyAction("_right", Keyboard.D);*/
-			/*_ce.input.keyboard.removeKeyActions(Keyboard.LEFT);
-			_ce.input.keyboard.addKeyAction("_left", Keyboard.A);*/
+			
+			setupHeroAction();
+		}
+		
+		private function setupHeroAction():void
+		{
+			
+			var keyboard:Keyboard = _ce.input.keyboard as Keyboard;
+			keyboard.addKeyAction("fly", Keyboard.F, inputChannel);
+			keyboard.addKeyAction(HeroActions.LEFT, Keyboard.A, inputChannel);
+			keyboard.addKeyAction(HeroActions.RIGHT, Keyboard.D, inputChannel);
+			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z, inputChannel);
 		}
 		
 		private function drawInsanityBar():void
@@ -369,6 +377,16 @@ package com
 			}
 		}
 		
+		public function getViewAsMovieClip():MovieClip
+		{
+			var art:SpriteArt = _ce.state.view.getArt(this) as SpriteArt;
+			
+			if(art != null && art.content != null){
+				return (art.content as MovieClip);
+			}
+			return null;
+		}
+		
 		private function invert():void
 		{
 			insanity = 0;
@@ -444,5 +462,21 @@ package com
 		{
 			return ecolocalizadorUsed;
 		}
+
+		public function getCamPos():Point
+		{
+			return _camPos;
+		}
+
+		public function setCamPos(value:Point):void
+		{
+			_camPos = value;
+		}
+		
+		public function getInsanity():int
+		{
+			return insanity;
+		}
+
 	}
 }

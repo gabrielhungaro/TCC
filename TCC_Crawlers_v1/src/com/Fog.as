@@ -74,7 +74,8 @@ package com
 				_mask.y = _camPoint.y - _target.y;
 			}else{
 				_mask.x = _target.x - _camPoint.x;
-				_mask.y = _target.y - _camPoint.y;		}
+				_mask.y = _target.y - _camPoint.y;		
+			}
 			
 			if(withEcolocalizador){
 				_mask.rotation = Math.atan2(mouseY - _mask.y, mouseX - _mask.x)*radToDeg;

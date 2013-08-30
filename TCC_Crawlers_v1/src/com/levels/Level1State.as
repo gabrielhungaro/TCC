@@ -1,8 +1,10 @@
 package com.levels
 {
-	import com.MyHero;
 	import com.Spike;
+	import com.Spike2;
 	import com.hero.HeroActions;
+	import com.hero.MyHero;
+	import com.objects.Torch;
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -28,7 +30,7 @@ package com.levels
 			super();
 			this._levelSWF = levelSWF;
 			_debugSprite = debugSprite;
-			objectsArray = [Platform, Spike, MyHero]
+			objectsArray = [Platform, Spike, Spike2, MyHero, Torch]
 		}
 		
 		override public function initialize():void
@@ -37,9 +39,8 @@ package com.levels
 			
 			//ObjectMaker2D.FromMovieClip(_levelSWF);
 			
-			createHero();
-			setupHeroAction();
-			setUpCamera();
+			//createHero();
+			//setUpCamera();
 		}
 		
 		private function setUpCamera():void
@@ -59,14 +60,6 @@ package com.levels
 			hero.setWorldScale(this.box2D.scale);
 			hero.setInitialPos(new Point(hero.x, hero.y))
 			hero.init();
-		}
-		
-		private function setupHeroAction():void
-		{
-			var keyboard:Keyboard = CitrusEngine.getInstance().input.keyboard as Keyboard;
-			keyboard.addKeyAction(HeroActions.LEFT, Keyboard.A);
-			keyboard.addKeyAction(HeroActions.RIGHT, Keyboard.D);
-			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z);
 		}
 	}
 }
