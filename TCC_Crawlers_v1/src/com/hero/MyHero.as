@@ -6,6 +6,7 @@ package com.hero
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
@@ -23,6 +24,7 @@ package com.hero
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
 	import citrus.view.spriteview.SpriteArt;
+	import com.levels.ILevel;
 	
 	public class MyHero extends Hero
 	{
@@ -36,7 +38,7 @@ package com.hero
 		private var _worldScale:Number;
 		private var _world:b2World;
 		private var withRock:Boolean = false;
-		private var _state:Level;
+		private var iLevel:ILevel;
 		private var fog:Fog;
 		private var isWithTorch:Boolean = false;
 		private var _camPos:Point;
@@ -57,6 +59,7 @@ package com.hero
 		private var dirX:Number;
 		private var dirY:Number;
 		private var arrayOfRocks:Vector.<Rock>;
+		private var shadow:Shadow;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -68,7 +71,7 @@ package com.hero
 			FRAME_RATE = _ce.stage.frameRate;
 			insanityTime = insanityTime*FRAME_RATE;
 			setDebugInsanity(true);
-			_camPos = _state.view.camera.camPos;
+			_camPos = iLevel.getCamPos();
 			fog = new Fog(this, _camPos, 0, 0, _ce.stage.stageWidth, _ce.stage.stageHeight);
 			fog.setFrameRate(FRAME_RATE);
 			fog.init();
@@ -77,6 +80,24 @@ package com.hero
 			arrayOfRocks = new Vector.<Rock>;
 			
 			setupHeroAction();
+			createShadow();
+		}
+		
+		private function createShadow():void
+		{
+			shadow = new Shadow();
+			//shadow.setAsset(hero.getViewAsMovieClip());
+			shadow.setHero(this);
+			//shadow.x = hero.x - hero.width/2;
+			//shadow.y = hero.y - hero.height/2;
+			_ce.addChild(shadow);
+			shadow.addEventListener(MouseEvent.CLICK, onClickShadow);
+		}
+		
+		protected function onClickShadow(event:MouseEvent):void
+		{
+			// TODO Auto-generated method stub
+			
 		}
 		
 		private function setupHeroAction():void
@@ -222,13 +243,16 @@ package com.hero
 		{
 			super.update(timeDelta);
 			
-			ticks = _state.getTicks();
-			seconds = _state.getSeconds();
-			minutes = _state.getMinutes();
+			ticks = iLevel.getTicks();
+			seconds = iLevel.getSeconds();
+			minutes = iLevel.getMinutes();
 			
 			updateInsanity();
 			debugInsanity();
 			updateRocksPosition();
+			
+			shadow.x = this.x - this.width/2 - this.getCamPos().x;
+			shadow.y = this.y - this.height/2 - this.getCamPos().y;
 			
 			// we get a reference to the actual velocity vector
 			var velocity:b2Vec2 = _body.GetLinearVelocity();
@@ -241,14 +265,7 @@ package com.hero
 				
 				if(_ce.input.justDid(HeroActions.INVERT, inputChannel) && isInsane)
 				{
-					trace("vou inverter");
-					if(this.rotation == 0){
-						this.rotation = 180;
-						isInverted = true;
-					}else{
-						this.rotation = 0;
-						isInverted = false;
-					}
+					invertWorld();
 				}
 				
 				if(_ce.input.justDid("fly", inputChannel))
@@ -357,6 +374,8 @@ package com.hero
 					insanity-=2;
 				}
 				insanityBar.scaleX = insanity / insanityLimit;
+				//trace(shadow.scaleX);
+				shadow.scaleX = shadow.scaleY = (insanity / insanityLimit) + 1;
 			}
 			if(insanity >= insanityDangerous && insanity <= insanityLimit){
 				isInsane = true;
@@ -391,7 +410,21 @@ package com.hero
 		{
 			insanity = 0;
 			//TODO arrumar o invert e tirar do state
-			//_state.invertAll();
+			iLevel.invertAll();
+		}
+		
+		private function invertWorld():void
+		{
+			
+			trace("vou inverter");
+			if(this.rotation == 0){
+				this.rotation = 180;
+				isInverted = true;
+			}else{
+				this.rotation = 0;
+				isInverted = false;
+			}
+			iLevel.invertAll();
 		}
 		
 		public function setInverted(value:Boolean):void
@@ -420,9 +453,9 @@ package com.hero
 			return withRock;
 		}
 		
-		public function setState(value:Level):void
+		public function setState(value:ILevel):void
 		{
-			_state = value;
+			iLevel = value;
 		}
 		
 		public function useEcolocalizador():void
