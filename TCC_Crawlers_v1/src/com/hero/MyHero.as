@@ -249,8 +249,8 @@ package com.hero
 			debugInsanity();
 			updateRocksPosition();
 			
-			shadow.x = this.x - this.width/2 - this.getCamPos().x;
-			shadow.y = this.y - this.height/2 - this.getCamPos().y;
+			updateShadowPosition();
+			
 			
 			// we get a reference to the actual velocity vector
 			var velocity:b2Vec2 = _body.GetLinearVelocity();
@@ -347,6 +347,15 @@ package com.hero
 			}
 			
 			updateAnimation();
+		}
+		
+		private function updateShadowPosition():void
+		{
+			//shadow.x = this.x - this.width/2 - this.getCamPos().x;
+			//shadow.y = this.y - this.height/2 - this.getCamPos().y;
+			
+			shadow.x = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).x;
+			shadow.y = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).y;
 		}
 		
 		private function updateRocksPosition():void

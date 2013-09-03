@@ -21,15 +21,10 @@ package com
 		private function activeTeleport(cEvt:b2Contact):void {
 			if (cEvt.GetFixtureA().GetBody().GetUserData() is MyHero) {
 				this.object = cEvt.GetFixtureA().GetBody().GetUserData();
-				hero.reset();
+				cEvt.GetFixtureA().GetBody().GetUserData().reset();
 				this.teleport = true;
 			}
 		}
-		
-		/*override protected function _teleport():void
-		{
-			
-		}*/
 		
 		public function setHero(value:MyHero):void
 		{

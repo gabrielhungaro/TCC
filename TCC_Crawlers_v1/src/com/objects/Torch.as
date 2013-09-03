@@ -11,6 +11,7 @@ package com.objects
 		public function Torch(name:String, params:Object=null)
 		{
 			super(name, params);
+			this.view = "../lib/Torch.swf";
 			this.onBeginContact.add(cathTorch);
 		}
 		
