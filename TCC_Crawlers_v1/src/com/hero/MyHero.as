@@ -1,7 +1,7 @@
 package com.hero
 {
 	import com.Fog;
-	import com.levels.Level;
+	import com.levels.ILevel;
 	import com.objects.Rock;
 	
 	import flash.display.MovieClip;
@@ -15,8 +15,6 @@ package com.hero
 	import Box2D.Dynamics.b2World;
 	import Box2D.Dynamics.Contacts.b2Contact;
 	
-	import citrus.core.CitrusEngine;
-	import citrus.core.State;
 	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
 	import citrus.objects.platformer.box2d.Hero;
@@ -24,7 +22,6 @@ package com.hero
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
 	import citrus.view.spriteview.SpriteArt;
-	import com.levels.ILevel;
 	
 	public class MyHero extends Hero
 	{
@@ -52,7 +49,7 @@ package com.hero
 		private var seconds:int;
 		private var minutes:int;
 		private var isInsane:Boolean = false;
-		private var ecolocalizadorUsed:Boolean = false;
+		private var cameraUsed:Boolean = false;
 		
 		private var insanityBarBackgorund:Sprite;
 		private var insanityBar:Sprite;
@@ -108,6 +105,7 @@ package com.hero
 			keyboard.addKeyAction(HeroActions.LEFT, Keyboard.A, inputChannel);
 			keyboard.addKeyAction(HeroActions.RIGHT, Keyboard.D, inputChannel);
 			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z, inputChannel);
+			keyboard.addKeyAction(HeroActions.CAMERA, Keyboard.SHIFT, inputChannel);
 		}
 		
 		private function drawInsanityBar():void
@@ -176,7 +174,7 @@ package com.hero
 			setTimeout(resetRotation, 0);
 			
 			if(isInverted){
-				this.invert();
+				this.cancelInverted();
 			}
 			this.x = initialPos.x;
 			this.y = initialPos.y;
@@ -185,7 +183,7 @@ package com.hero
 			withRock = false;
 			isWithTorch = false;
 			isInsane = false;
-			ecolocalizadorUsed = false;
+			cameraUsed = false;
 			var normalColor:ColorTransform = new ColorTransform();
 			normalColor.color = 0x0000FF;
 			insanityBar.transform.colorTransform = normalColor;
@@ -262,6 +260,11 @@ package com.hero
 				var moveKeyPressed:Boolean = false;
 				
 				_ducking = (_ce.input.isDoing("duck", inputChannel) && _onGround && canDuck);
+				
+				if(_ce.input.justDid(HeroActions.CAMERA, inputChannel) && !this.cameraUsed)
+				{
+					useCamera();
+				}
 				
 				if(_ce.input.justDid(HeroActions.INVERT, inputChannel) && isInsane)
 				{
@@ -391,7 +394,7 @@ package com.hero
 					normalColor.color = 0x0000FF;
 					insanityBar.transform.colorTransform = normalColor;
 					isInsane = false;
-					this.invert();
+					this.cancelInverted();
 				}
 			}
 		}
@@ -406,11 +409,12 @@ package com.hero
 			return null;
 		}
 		
-		private function invert():void
+		private function cancelInverted():void
 		{
 			insanity = 0;
 			//TODO arrumar o invert e tirar do state
-			iLevel.invertAll();
+			invertWorld();
+			//iLevel.invertAll();
 		}
 		
 		private function invertWorld():void
@@ -458,10 +462,10 @@ package com.hero
 			iLevel = value;
 		}
 		
-		public function useEcolocalizador():void
+		public function useCamera():void
 		{
 			insanity += 10;
-			ecolocalizadorUsed = true;
+			cameraUsed = true;
 			fog.useEcolocalizador()
 		}
 		
@@ -488,12 +492,12 @@ package com.hero
 		
 		public function setEcolocalizadorUsed(value:Boolean):void
 		{
-			ecolocalizadorUsed = value;
+			cameraUsed = value;
 		}
 		
 		public function getEcolocalizadorUsed():Boolean
 		{
-			return ecolocalizadorUsed;
+			return cameraUsed;
 		}
 
 		public function getCamPos():Point

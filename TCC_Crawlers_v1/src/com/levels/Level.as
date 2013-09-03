@@ -1,8 +1,6 @@
 package com.levels
 {
-	import com.hero.HeroActions;
 	import com.hero.MyHero;
-	import com.hero.Shadow;
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -13,7 +11,6 @@ package com.levels
 	
 	import citrus.core.CitrusEngine;
 	import citrus.core.State;
-	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
 	import citrus.objects.CitrusSprite;
 	import citrus.physics.box2d.Box2D;

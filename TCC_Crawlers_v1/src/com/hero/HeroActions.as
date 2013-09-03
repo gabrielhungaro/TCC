@@ -7,6 +7,7 @@ package com.hero
 		public static const JUMP:String = "jump";
 		public static const INVERT:String = "invert";
 		public static const ACTION:String = "action";
+		public static const CAMERA:String = "camera";
 		
 		public function HeroActions()
 		{

@@ -2,7 +2,6 @@ package com.levels
 {
 	import com.Spike;
 	import com.Spike2;
-	import com.hero.HeroActions;
 	import com.hero.MyHero;
 	import com.objects.Torch;
 	
@@ -11,13 +10,8 @@ package com.levels
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import citrus.core.CitrusEngine;
-	import citrus.input.controllers.Keyboard;
 	import citrus.math.MathVector;
-	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
-	import citrus.physics.box2d.Box2D;
-	import citrus.utils.objectmakers.ObjectMaker2D;
 	
 	public class Level1State extends Level
 	{
