@@ -1,8 +1,6 @@
 package com.hero
 {
-	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.geom.Point;
 	
 	public class Shadow extends Sprite
 	{

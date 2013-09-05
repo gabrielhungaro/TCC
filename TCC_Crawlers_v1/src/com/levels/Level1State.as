@@ -4,6 +4,7 @@ package com.levels
 	import com.Spike;
 	import com.Spike2;
 	import com.hero.MyHero;
+	import com.objects.Flashlight;
 	import com.objects.Torch;
 	
 	import flash.display.MovieClip;
@@ -25,7 +26,7 @@ package com.levels
 			super();
 			this._levelSWF = levelSWF;
 			_debugSprite = debugSprite;
-			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat]
+			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight]
 		}
 		
 		override public function initialize():void

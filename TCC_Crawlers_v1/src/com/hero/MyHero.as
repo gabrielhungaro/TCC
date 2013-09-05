@@ -57,6 +57,7 @@ package com.hero
 		private var dirY:Number;
 		private var arrayOfRocks:Vector.<Rock>;
 		private var shadow:Shadow;
+		private var isWithFlashlight:Boolean;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -93,8 +94,7 @@ package com.hero
 		
 		protected function onClickShadow(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
-			
+			invertWorld();
 		}
 		
 		private function setupHeroAction():void
@@ -266,7 +266,7 @@ package com.hero
 					useCamera();
 				}
 				
-				if(_ce.input.justDid(HeroActions.INVERT, inputChannel) && isInsane)
+				if(_ce.input.justDid(HeroActions.INVERT, inputChannel))
 				{
 					invertWorld();
 				}
@@ -402,8 +402,8 @@ package com.hero
 					var normalColor:ColorTransform = new ColorTransform();
 					normalColor.color = 0x0000FF;
 					insanityBar.transform.colorTransform = normalColor;
-					isInsane = false;
 					this.cancelInverted();
+					isInsane = false;
 				}
 			}
 		}
@@ -423,21 +423,23 @@ package com.hero
 			insanity = 0;
 			//TODO arrumar o invert e tirar do state
 			invertWorld();
+			isInsane = false;
 			//iLevel.invertAll();
 		}
 		
 		private function invertWorld():void
 		{
-			
-			trace("vou inverter");
-			if(this.rotation == 0){
-				this.rotation = 180;
-				isInverted = true;
-			}else{
-				this.rotation = 0;
-				isInverted = false;
+			if(isInsane){
+				trace("vou inverter");
+				if(this.rotation == 0){
+					this.rotation = 180;
+					isInverted = true;
+				}else{
+					this.rotation = 0;
+					isInverted = false;
+				}
+				iLevel.invertAll();
 			}
-			iLevel.invertAll();
 		}
 		
 		public function setInverted(value:Boolean):void
@@ -486,6 +488,12 @@ package com.hero
 		public function setWithTorch(value:Boolean):void
 		{
 			isWithTorch = value;
+			fog.setWithTorch(value);
+		}
+		
+		public function setWithFlashlight(value:Boolean):void
+		{
+			isWithFlashlight = value;
 			fog.setWithTorch(value);
 		}
 		

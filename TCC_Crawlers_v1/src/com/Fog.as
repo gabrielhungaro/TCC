@@ -9,7 +9,7 @@ package com
 	public class Fog extends Sprite
 	{
 		private var fog:Sprite;
-		private var _mask:EcolocalizadorAsset;
+		private var _mask:HeroLightAsset;
 		private var _target:Object;
 		private var point:Point;
 		private var targetPoint:Point;
@@ -26,6 +26,7 @@ package com
 		private var seconds:int;
 		private var secondsWithTorch:int = 5;
 		private var timerWithEcolocalizador:int = 1;
+		private var ALPHA:Number = .2;
 		
 		public function Fog(target:Object, camPoint:Point, _x:int, _y:int, _width:int, _height:int)
 		{
@@ -34,12 +35,12 @@ package com
 			
 			targetPoint = new Point(target.x, target.y);
 			fog = new Sprite();
-			fog.alpha = .8;
+			fog.alpha = ALPHA;
 			fog.graphics.beginFill(0x000000, 1);
 			fog.graphics.drawRect(_x, _y, _width, _height);
 			fog.blendMode = BlendMode.LAYER;
 			
-			_mask = new EcolocalizadorAsset();
+			_mask = new HeroLightAsset();
 			_mask.x = _target.x;
 			_mask.y = _target.y;
 			_mask.scaleX = _mask.scaleY = originalScale;

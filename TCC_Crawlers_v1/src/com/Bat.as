@@ -1,13 +1,10 @@
 package com
 {
-	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.plugins.BezierPlugin;
 	import com.greensock.plugins.BezierThroughPlugin;
 	import com.greensock.plugins.TweenPlugin;
 	import com.hero.MyHero;
-	
-	import flash.display.Bitmap;
 	
 	import Box2D.Dynamics.Contacts.b2Contact;
 	
@@ -25,12 +22,21 @@ package com
 		private var distance:Number;
 		private var target:Object;
 		private var tweening:Boolean;
+		private var initPosX:int;
+		private var initPosY:int;
+		private var distanceToFly:int = 50;
 		public function Bat(name:String, params:Object=null)
 		{
 			super(name, params);
 			this.view = "../lib/bat_resize.png";
-			minimumDistance = 100;
+			minimumDistance = 200;
 			this.onBeginContact.add(hit);
+			this.initPosX = this.x;
+			this.initPosY = this.y;
+			this.updateCallEnabled = true;
+			
+			//this.x = 20;
+			//this.y = 20;
 		}
 		
 		private function hit(contact:b2Contact):void
@@ -44,21 +50,35 @@ package com
 		override public function update(timeDelta:Number):void
 		{
 			super.update(timeDelta);
-			trace("bulbi");
-			calcDistance(target, this);
-			if(distance <= minimumDistance && !tweening){
-				TweenMax.to(this, 3, {bezier:[{x:191, y:this.y + 20}, {x:308, y:this.y}]});
-				//TweenLite.to(this, 3, {bezier:[{x:191, y:this.y}, {x:308, y:this.y}]});
-				trace("VOU VOAAAAAAAAAAAAAAAAAAAAAAAAAAAAR!");
-			}
+			//if(target){
+				calcDistance(_ce.state.getObjectsByType(MyHero)[0], this);
+				if(distance <= minimumDistance && !tweening){
+					tweening = true;
+					doBatTween();
+					//TweenLite.to(this, 3, {bezier:[{x:191, y:this.y}, {x:308, y:this.y}]});
+					trace("VOU VOAAAAAAAAAAAAAAAAAAAAAAAAAAAAR!");
+				}
+			//}
+		}
+		
+		private function doBatTween():void
+		{
+			var flyRange:int = initPosX + distanceToFly;
+			trace("this.x: " + this.x, "this.y: " + this.y, "flyRange: " + flyRange);
+			TweenMax.to(this, 3, {bezierThrough:[{x:flyRange/2, y:initPosY + 50}, {x:flyRange, y:initPosY}], onComplete:onCompleteTween});
+			//TweenMax.to(this, 3, {bezierThrough:[{x:50, y:40}, {x:100, y:20}], onComplete:onCompleteTween});
+		}
+		
+		private function onCompleteTween():void
+		{
+			trace("TERMINEI DE VOAR");
+			distanceToFly *= -1;
+			tweening = false;
 		}
 		
 		private function calcDistance(obj1:Object, obj2:Object):Number
 		{
-			distance = Math.SQRT2((obj1.x - obj2.x) * (obj1.x - obj2.x) + (obj1.y - obj2.y) * (obj1.y - obj2.y));
-			trace(distance);
-			
-			
+			distance = Math.sqrt((obj1.x - obj2.x) * (obj1.x - obj2.x) + (obj1.y - obj2.y) * (obj1.y - obj2.y));
 			return distance;
 		}
 		
