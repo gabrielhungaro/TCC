@@ -12,7 +12,7 @@ package com
 	import citrus.core.CitrusEngine;
 	import citrus.input.controllers.Keyboard;
 	
-	[SWF(width=550,height=400)]
+	[SWF(width=800,height=600)]
 	public class TCC_Citrus_Test extends CitrusEngine
 	{
 		Security.allowDomain("*");

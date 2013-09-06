@@ -50,6 +50,7 @@ package com.hero
 		private var minutes:int;
 		private var isInsane:Boolean = false;
 		private var cameraUsed:Boolean = false;
+		private var flashlightUsed:Boolean = false;
 		
 		private var insanityBarBackgorund:Sprite;
 		private var insanityBar:Sprite;
@@ -58,6 +59,9 @@ package com.hero
 		private var arrayOfRocks:Vector.<Rock>;
 		private var shadow:Shadow;
 		private var isWithFlashlight:Boolean;
+		private var flashlightEnergy:int;
+		private var maxFlashlightEnergy:int = 100;
+		private var minFlashlightEnergy:int = 10;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -106,6 +110,7 @@ package com.hero
 			keyboard.addKeyAction(HeroActions.RIGHT, Keyboard.D, inputChannel);
 			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z, inputChannel);
 			keyboard.addKeyAction(HeroActions.CAMERA, Keyboard.SHIFT, inputChannel);
+			keyboard.addKeyAction(HeroActions.FLASHLIGHT, Keyboard.X, inputChannel);
 		}
 		
 		private function drawInsanityBar():void
@@ -182,6 +187,7 @@ package com.hero
 			insanity = 0;
 			withRock = false;
 			isWithTorch = false;
+			isWithFlashlight = false;
 			isInsane = false;
 			cameraUsed = false;
 			var normalColor:ColorTransform = new ColorTransform();
@@ -264,6 +270,11 @@ package com.hero
 				if(_ce.input.justDid(HeroActions.CAMERA, inputChannel) && !this.cameraUsed)
 				{
 					useCamera();
+				}
+				
+				if(_ce.input.justDid(HeroActions.FLASHLIGHT, inputChannel) && !this.cameraUsed && !this.flashlightUsed)
+				{
+					useFlashlight();
 				}
 				
 				if(_ce.input.justDid(HeroActions.INVERT, inputChannel))
@@ -477,7 +488,13 @@ package com.hero
 		{
 			insanity += 10;
 			cameraUsed = true;
-			fog.useEcolocalizador()
+			fog.useCamera();
+		}
+		
+		public function useFlashlight():void
+		{
+			flashlightUsed = true;
+			fog.useFlashlight();
 		}
 		
 		public function setInitialPos(value:Point):void
@@ -493,8 +510,8 @@ package com.hero
 		
 		public function setWithFlashlight(value:Boolean):void
 		{
+			this.flashlightEnergy = maxFlashlightEnergy;
 			isWithFlashlight = value;
-			fog.setWithTorch(value);
 		}
 		
 		private function setDebugInsanity(value:Boolean):void
@@ -507,12 +524,12 @@ package com.hero
 			return isInsane;
 		}
 		
-		public function setEcolocalizadorUsed(value:Boolean):void
+		public function setCameraUsed(value:Boolean):void
 		{
 			cameraUsed = value;
 		}
 		
-		public function getEcolocalizadorUsed():Boolean
+		public function getCameraUsed():Boolean
 		{
 			return cameraUsed;
 		}
@@ -532,5 +549,34 @@ package com.hero
 			return insanity;
 		}
 
+		public function getFlashlightEnergy():int
+		{
+			return flashlightEnergy;
+		}
+
+		public function setFlashlightEnergy(value:int):void
+		{
+			flashlightEnergy = value;
+		}
+
+		public function getMinFlashlightEnergy():int
+		{
+			return minFlashlightEnergy;
+		}
+
+		public function setMinFlashlightEnergy(value:int):void
+		{
+			minFlashlightEnergy = value;
+		}
+
+		public function getMaxFlashlightEnergy():int
+		{
+			return maxFlashlightEnergy;
+		}
+
+		public function setMaxFlashlightEnergy(value:int):void
+		{
+			maxFlashlightEnergy = value;
+		}
 	}
 }

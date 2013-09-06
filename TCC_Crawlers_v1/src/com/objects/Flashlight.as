@@ -12,7 +12,7 @@ package com.objects
 		public function Flashlight(name:String, params:Object=null)
 		{
 			super(name, params);
-			this.view = "../lib/Torch.swf";
+			this.view = "../lib/flashlight_resize.png";
 			this.onBeginContact.add(cathTorch);
 		}
 		

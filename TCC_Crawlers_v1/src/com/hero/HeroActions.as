@@ -8,6 +8,7 @@ package com.hero
 		public static const INVERT:String = "invert";
 		public static const ACTION:String = "action";
 		public static const CAMERA:String = "camera";
+		public static const FLASHLIGHT:String = "flashlight";
 		
 		public function HeroActions()
 		{

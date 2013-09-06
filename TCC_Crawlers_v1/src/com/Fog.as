@@ -9,7 +9,7 @@ package com
 	public class Fog extends Sprite
 	{
 		private var fog:Sprite;
-		private var _mask:HeroLightAsset;
+		private var _heroLight:HeroLightAsset;
 		private var _target:Object;
 		private var point:Point;
 		private var targetPoint:Point;
@@ -18,15 +18,20 @@ package com
 		private var isInverted:Boolean;
 		private var originalScale:Number = 1;
 		private var risezedScale:Number = 2;
-		private var withEcolocalizador:Boolean;
 		private var radToDeg:Number = 180/Math.PI;
+		private var isWithCamera:Boolean;
 		private var isWithTorch:Boolean;
+		private var isWithFlashlight:Boolean;
 		private var ticks:int;
 		private var FRAME_RATE:int;
 		private var seconds:int;
 		private var secondsWithTorch:int = 5;
-		private var timerWithEcolocalizador:int = 1;
-		private var ALPHA:Number = .2;
+		private var timerWithCamera:int = 1;
+		private var ALPHA:Number = .8;
+		private var lightType:String;
+		private var NORMAL_LIGHT:String = "normal";
+		private var CAMERA_LIGHT:String = "camera";
+		private var FLASHLIGHT_LIGHT:String = "flashlight";
 		
 		public function Fog(target:Object, camPoint:Point, _x:int, _y:int, _width:int, _height:int)
 		{
@@ -40,20 +45,20 @@ package com
 			fog.graphics.drawRect(_x, _y, _width, _height);
 			fog.blendMode = BlendMode.LAYER;
 			
-			_mask = new HeroLightAsset();
-			_mask.x = _target.x;
-			_mask.y = _target.y;
-			_mask.scaleX = _mask.scaleY = originalScale;
-			_mask.blendMode = BlendMode.ERASE;
+			_heroLight = new HeroLightAsset();
+			_heroLight.x = _target.x;
+			_heroLight.y = _target.y;
+			_heroLight.scaleX = _heroLight.scaleY = originalScale;
+			_heroLight.blendMode = BlendMode.ERASE;
 		}
 		
 		public function init():void
 		{
 			this.addChild(fog);
 			
-			fog.addChild(_mask);
+			fog.addChild(_heroLight);
 			
-			timerWithEcolocalizador = timerWithEcolocalizador * FRAME_RATE;
+			timerWithCamera = timerWithCamera * FRAME_RATE;
 			
 			this.addEventListener(Event.ENTER_FRAME, update);
 		}
@@ -66,50 +71,87 @@ package com
 				ticks = 0;
 				seconds++;
 			}
-			if(isWithTorch){
-				updateLightSize();
-			}
+			//updateLightType();
+			updateLightSize();
 			
 			if(isInverted){
-				_mask.x = _camPoint.x - _target.x;
-				_mask.y = _camPoint.y - _target.y;
+				_heroLight.x = _camPoint.x - _target.x;
+				_heroLight.y = _camPoint.y - _target.y;
 			}else{
-				_mask.x = _target.x - _camPoint.x;
-				_mask.y = _target.y - _camPoint.y;		
+				_heroLight.x = _target.x - _camPoint.x;
+				_heroLight.y = _target.y - _camPoint.y;		
 			}
 			
-			if(withEcolocalizador){
-				_mask.rotation = Math.atan2(mouseY - _mask.y, mouseX - _mask.x)*radToDeg;
-				if((ticks % timerWithEcolocalizador * FRAME_RATE) == 0){
-					this.releaseEcolocalizador();
+			if(isWithCamera){
+				_heroLight.rotation = Math.atan2(mouseY - _heroLight.y, mouseX - _heroLight.x)*radToDeg;
+				if((ticks % timerWithCamera * FRAME_RATE) == 0){
+					this.releaseCamera();
 				}
 			}
+		}
+		
+		private function updateLightType():void
+		{
+			if(isWithFlashlight){
+				lightType = FLASHLIGHT_LIGHT;
+			}else if(isWithTorch){
+				lightType = NORMAL_LIGHT;
+			}else if(isWithCamera){
+				lightType = CAMERA_LIGHT;
+			}else{
+				lightType = NORMAL_LIGHT;
+				_heroLight.scaleX = _heroLight.scaleY = originalScale;
+			}
+			_heroLight.gotoAndStop(lightType);
 		}
 		
 		private function updateLightSize():void
 		{
-			if((seconds % secondsWithTorch * FRAME_RATE) == 0){
-				if(_mask.scaleX > originalScale){
-					_mask.scaleX = _mask.scaleY -= .01;
-				}else{
-					isWithTorch = false;
+			if(isWithTorch){
+				if((seconds % secondsWithTorch * FRAME_RATE) == 0){
+					if(_heroLight.scaleX > originalScale){
+						_heroLight.scaleX = _heroLight.scaleY -= .01;
+					}else{
+						isWithTorch = false;
+					}
+				}
+			}else if(isWithFlashlight){
+				//_heroLight.rotation = Math.atan2(mouseY - _heroLight.y, mouseX - _heroLight.x)*radToDeg;
+				if((seconds % secondsWithTorch * FRAME_RATE) == 0){
+					if(_target.getFlashlightEnergy() > _target.getMinFlashlightEnergy()){
+						_heroLight.scaleX = _target.getFlashlightEnergy()/100;
+						_target.setFlashlightEnergy(_target.getFlashlightEnergy()-1);
+					}else{
+						isWithFlashlight = false;
+					}
 				}
 			}
 		}
 		
-		public function useEcolocalizador():void
+		public function useCamera():void
 		{
-			//_mask.scaleX = 2;
-			withEcolocalizador = true;
-			_mask.gotoAndStop(2);
+			//_heroLight.scaleX = 2;
+			lightType = CAMERA_LIGHT;
+			isWithCamera = true;
+			_heroLight.gotoAndStop(lightType);
 		}
 		
-		public function releaseEcolocalizador():void
+		public function useFlashlight():void
 		{
-			_target.setEcolocalizadorUsed(false);
-			_mask.gotoAndStop(1);
-			//_mask.scaleX = _mask.scaleY = originalScale;
-			withEcolocalizador = false;
+			//_heroLight.scaleX = 2;
+			lightType = FLASHLIGHT_LIGHT;
+			_heroLight.scaleX = _heroLight.scaleY = originalScale;
+			isWithFlashlight = true;
+			_heroLight.gotoAndStop(lightType);
+		}
+		
+		public function releaseCamera():void
+		{
+			lightType = NORMAL_LIGHT;
+			_target.setCameraUsed(false);
+			_heroLight.gotoAndStop(lightType);
+			//_heroLight.scaleX = _heroLight.scaleY = originalScale;
+			isWithCamera = false;
 		}
 		
 		public function setInverted(value:Boolean):void
@@ -124,7 +166,9 @@ package com
 		public function setWithTorch(value:Boolean):void
 		{
 			isWithTorch = value;
-			_mask.scaleX = _mask.scaleY = risezedScale;
+			lightType = NORMAL_LIGHT;
+			_heroLight.scaleX = _heroLight.scaleY = risezedScale;
+			_heroLight.gotoAndStop(lightType);
 		}
 		
 		public function setFrameRate(value:int):void
