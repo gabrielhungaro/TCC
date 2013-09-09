@@ -1,5 +1,6 @@
 package com.objects
 {
+	import com.ImageConstants;
 	import com.hero.MyHero;
 	
 	import Box2D.Dynamics.Contacts.b2Contact;
@@ -11,7 +12,7 @@ package com.objects
 		public function Torch(name:String, params:Object=null)
 		{
 			super(name, params);
-			this.view = "../lib/Torch.swf";
+			this.view = ImageConstants.TORCH;
 			this.onBeginContact.add(cathTorch);
 		}
 		
@@ -21,6 +22,7 @@ package com.objects
 			if(contact.GetFixtureA().GetBody().GetUserData() is MyHero){
 				//addTutorialScreen("Você pegou a tocha, com ela seu campo de visão aumenta, porém vai diminuindo com o tempo, para utilizá-la novamente precione a tecla 'C'!");
 				contact.GetFixtureA().GetBody().GetUserData().setWithTorch(true);
+				_ce.state.remove(this);
 			}
 		}
 	}

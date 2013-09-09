@@ -1,6 +1,13 @@
 package com.levels
 {
+	import com.Bat;
+	import com.ImageConstants;
+	import com.Spike;
+	import com.Spike2;
 	import com.hero.MyHero;
+	import com.objects.Flashlight;
+	import com.objects.Stack;
+	import com.objects.Torch;
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -13,6 +20,7 @@ package com.levels
 	import citrus.core.State;
 	import citrus.math.MathVector;
 	import citrus.objects.CitrusSprite;
+	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
 	import citrus.utils.objectmakers.ObjectMaker2D;
 	
@@ -34,6 +42,7 @@ package com.levels
 		public function Level()
 		{
 			super();
+			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack]
 		}
 		
 		override public function initialize():void
@@ -55,7 +64,7 @@ package com.levels
 		
 		public function addBackground():void
 		{
-			var bg:CitrusSprite = new CitrusSprite("background", {view: "../lib/bg_level1_resize.jpg", width:10, height:stage.stageHeight});
+			var bg:CitrusSprite = new CitrusSprite("background", {view: ImageConstants.BACKGROUND, width:10, height:stage.stageHeight});
 			bg.parallaxX = 1;
 			add(bg);
 		}

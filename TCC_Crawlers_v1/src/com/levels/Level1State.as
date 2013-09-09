@@ -26,7 +26,6 @@ package com.levels
 			super();
 			this._levelSWF = levelSWF;
 			_debugSprite = debugSprite;
-			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight]
 		}
 		
 		override public function initialize():void

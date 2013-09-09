@@ -1,6 +1,7 @@
 package com.hero
 {
 	import com.Fog;
+	import com.ImageConstants;
 	import com.levels.ILevel;
 	import com.objects.Rock;
 	
@@ -50,7 +51,7 @@ package com.hero
 		private var minutes:int;
 		private var isInsane:Boolean = false;
 		private var cameraUsed:Boolean = false;
-		private var flashlightUsed:Boolean = false;
+		private var usingFlashlight:Boolean = false;
 		
 		private var insanityBarBackgorund:Sprite;
 		private var insanityBar:Sprite;
@@ -66,6 +67,7 @@ package com.hero
 		public function MyHero(name:String, params:Object=null)
 		{
 			super(name, params);
+			this.view = ImageConstants.HERO;
 		}
 		
 		public function init():void
@@ -188,8 +190,10 @@ package com.hero
 			withRock = false;
 			isWithTorch = false;
 			isWithFlashlight = false;
+			usingFlashlight = false;
 			isInsane = false;
 			cameraUsed = false;
+			fog.reset();
 			var normalColor:ColorTransform = new ColorTransform();
 			normalColor.color = 0x0000FF;
 			insanityBar.transform.colorTransform = normalColor;
@@ -272,7 +276,7 @@ package com.hero
 					useCamera();
 				}
 				
-				if(_ce.input.justDid(HeroActions.FLASHLIGHT, inputChannel) && !this.cameraUsed && !this.flashlightUsed)
+				if(_ce.input.justDid(HeroActions.FLASHLIGHT, inputChannel) && !this.cameraUsed)
 				{
 					useFlashlight();
 				}
@@ -493,8 +497,13 @@ package com.hero
 		
 		public function useFlashlight():void
 		{
-			flashlightUsed = true;
-			fog.useFlashlight();
+			if(this.isWithFlashlight && this.flashlightEnergy > this.minFlashlightEnergy){
+				usingFlashlight = true;
+				fog.useFlashlight();
+			}else if(this.isWithFlashlight && this.usingFlashlight){
+				usingFlashlight = false;
+				fog.useFlashlight();
+			}
 		}
 		
 		public function setInitialPos(value:Point):void
@@ -562,6 +571,16 @@ package com.hero
 		public function getMinFlashlightEnergy():int
 		{
 			return minFlashlightEnergy;
+		}
+		
+		public function addFlashlightEnergy(value:int):void
+		{
+			flashlightEnergy += value;
+		}
+		
+		public function substractFlashlightEnergy(value:int):void
+		{
+			flashlightEnergy -= value;
 		}
 
 		public function setMinFlashlightEnergy(value:int):void

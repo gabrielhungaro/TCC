@@ -28,7 +28,7 @@ package com
 		public function Bat(name:String, params:Object=null)
 		{
 			super(name, params);
-			this.view = "../lib/bat_resize.png";
+			this.view = ImageConstants.BAT;
 			minimumDistance = 200;
 			this.onBeginContact.add(hit);
 			this.initPosX = this.x;

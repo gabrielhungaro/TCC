@@ -21,17 +21,17 @@ package com
 		private var radToDeg:Number = 180/Math.PI;
 		private var isWithCamera:Boolean;
 		private var isWithTorch:Boolean;
-		private var isWithFlashlight:Boolean;
 		private var ticks:int;
 		private var FRAME_RATE:int;
 		private var seconds:int;
 		private var secondsWithTorch:int = 5;
 		private var timerWithCamera:int = 1;
 		private var ALPHA:Number = .8;
-		private var lightType:String;
+		private var lightType:String = NORMAL_LIGHT;
 		private var NORMAL_LIGHT:String = "normal";
 		private var CAMERA_LIGHT:String = "camera";
 		private var FLASHLIGHT_LIGHT:String = "flashlight";
+		private var usingFlashlight:Boolean;
 		
 		public function Fog(target:Object, camPoint:Point, _x:int, _y:int, _width:int, _height:int)
 		{
@@ -88,17 +88,26 @@ package com
 					this.releaseCamera();
 				}
 			}
+			if(usingFlashlight){
+				_heroLight.rotation = Math.atan2(mouseY - _heroLight.y, mouseX - _heroLight.x)*radToDeg;
+			}
 		}
 		
 		private function updateLightType():void
 		{
-			if(isWithFlashlight){
-				lightType = FLASHLIGHT_LIGHT;
-			}else if(isWithTorch){
+			if(isWithTorch){
 				lightType = NORMAL_LIGHT;
-			}else if(isWithCamera){
+				_heroLight.scaleX = _heroLight.scaleY = risezedScale;
+			}
+			if(usingFlashlight){
+				_heroLight.scaleX = _heroLight.scaleY = originalScale;
+				_heroLight.scaleX = _target.getFlashlightEnergy()/100;
+				lightType = FLASHLIGHT_LIGHT;
+			}
+			if(isWithCamera){
 				lightType = CAMERA_LIGHT;
-			}else{
+			}
+			if(!isWithCamera && !usingFlashlight && !isWithTorch){
 				lightType = NORMAL_LIGHT;
 				_heroLight.scaleX = _heroLight.scaleY = originalScale;
 			}
@@ -107,7 +116,7 @@ package com
 		
 		private function updateLightSize():void
 		{
-			if(isWithTorch){
+			if(isWithTorch && !usingFlashlight){
 				if((seconds % secondsWithTorch * FRAME_RATE) == 0){
 					if(_heroLight.scaleX > originalScale){
 						_heroLight.scaleX = _heroLight.scaleY -= .01;
@@ -115,14 +124,18 @@ package com
 						isWithTorch = false;
 					}
 				}
-			}else if(isWithFlashlight){
+			}
+			if(usingFlashlight){
 				//_heroLight.rotation = Math.atan2(mouseY - _heroLight.y, mouseX - _heroLight.x)*radToDeg;
 				if((seconds % secondsWithTorch * FRAME_RATE) == 0){
 					if(_target.getFlashlightEnergy() > _target.getMinFlashlightEnergy()){
-						_heroLight.scaleX = _target.getFlashlightEnergy()/100;
+						trace(_target.getFlashlightEnergy());
 						_target.setFlashlightEnergy(_target.getFlashlightEnergy()-1);
+						_heroLight.scaleX = _target.getFlashlightEnergy()/100;
 					}else{
-						isWithFlashlight = false;
+						_heroLight.scaleX = _heroLight.scaleY = originalScale;
+						usingFlashlight = false;
+						updateLightType();
 					}
 				}
 			}
@@ -138,11 +151,15 @@ package com
 		
 		public function useFlashlight():void
 		{
-			//_heroLight.scaleX = 2;
-			lightType = FLASHLIGHT_LIGHT;
-			_heroLight.scaleX = _heroLight.scaleY = originalScale;
-			isWithFlashlight = true;
-			_heroLight.gotoAndStop(lightType);
+			if(!usingFlashlight){
+				usingFlashlight = true;
+				_heroLight.scaleX = _target.getFlashlightEnergy()/100;
+			}else{
+				_heroLight.scaleX = _heroLight.scaleY = originalScale;
+				usingFlashlight = false;
+			}
+			updateLightType();
+			//_heroLight.gotoAndStop(lightType);
 		}
 		
 		public function releaseCamera():void
@@ -152,6 +169,14 @@ package com
 			_heroLight.gotoAndStop(lightType);
 			//_heroLight.scaleX = _heroLight.scaleY = originalScale;
 			isWithCamera = false;
+		}
+		
+		public function reset():void
+		{
+			isWithCamera = false;
+			isWithTorch = false;
+			usingFlashlight = false;
+			updateLightType();
 		}
 		
 		public function setInverted(value:Boolean):void
@@ -166,9 +191,7 @@ package com
 		public function setWithTorch(value:Boolean):void
 		{
 			isWithTorch = value;
-			lightType = NORMAL_LIGHT;
-			_heroLight.scaleX = _heroLight.scaleY = risezedScale;
-			_heroLight.gotoAndStop(lightType);
+			updateLightType();
 		}
 		
 		public function setFrameRate(value:int):void
