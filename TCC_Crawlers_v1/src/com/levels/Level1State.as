@@ -1,6 +1,7 @@
 package com.levels
 {
 	import com.Bat;
+	import com.ImageConstants;
 	import com.Spike;
 	import com.Spike2;
 	import com.hero.MyHero;
@@ -36,6 +37,11 @@ package com.levels
 			
 			//createHero();
 			//setUpCamera();
+		}
+		
+		override public function addBackground(imageURL:String=""):void
+		{
+			super.addBackground(ImageConstants.BACKGROUND_TUTORIAL1);
 		}
 		
 		private function setUpCamera():void

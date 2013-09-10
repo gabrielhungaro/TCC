@@ -62,9 +62,9 @@ package com.levels
 			setUpCamera();
 		}
 		
-		public function addBackground():void
+		public function addBackground(imageURL:String = ""):void
 		{
-			var bg:CitrusSprite = new CitrusSprite("background", {view: ImageConstants.BACKGROUND, width:10, height:stage.stageHeight});
+			var bg:CitrusSprite = new CitrusSprite("background", {view: imageURL, width:10, height:stage.stageHeight});
 			bg.parallaxX = 1;
 			add(bg);
 		}
