@@ -22,6 +22,7 @@ package com.hero
 	import citrus.objects.platformer.box2d.Sensor;
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
+	import citrus.view.ACitrusCamera;
 	import citrus.view.spriteview.SpriteArt;
 	
 	public class MyHero extends Hero
@@ -63,6 +64,7 @@ package com.hero
 		private var flashlightEnergy:int;
 		private var maxFlashlightEnergy:int = 100;
 		private var minFlashlightEnergy:int = 10;
+		private var _cam:ACitrusCamera;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -75,8 +77,8 @@ package com.hero
 			FRAME_RATE = _ce.stage.frameRate;
 			insanityTime = insanityTime*FRAME_RATE;
 			setDebugInsanity(true);
-			_camPos = iLevel.getCamPos();
-			fog = new Fog(this, _camPos, 0, 0, _ce.stage.stageWidth, _ce.stage.stageHeight);
+			//_camPos = iLevel.getCamPos();
+			fog = new Fog(this, _cam, 0, 0, _ce.stage.stageWidth, _ce.stage.stageHeight);
 			fog.setFrameRate(FRAME_RATE);
 			fog.init();
 			_ce.addChild(fog);
@@ -301,13 +303,13 @@ package com.hero
 					//insert other "flying" code here
 				}
 				
-				if (_ce.input.isDoing("right", inputChannel) && !_ducking)
+				if (_ce.input.isDoing(HeroActions.RIGHT, inputChannel) && !_ducking)
 				{
 					velocity.Add(getSlopeBasedMoveAngle());
 					moveKeyPressed = true;
 				}
 				
-				if (_ce.input.isDoing("left", inputChannel) && !_ducking)
+				if (_ce.input.isDoing(HeroActions.LEFT, inputChannel) && !_ducking)
 				{
 					velocity.Subtract(getSlopeBasedMoveAngle());
 					moveKeyPressed = true;
@@ -326,7 +328,7 @@ package com.hero
 					_fixture.SetFriction(_friction); //Add friction so that he stops running
 				}
 				
-				if (_onGround && _ce.input.justDid("jump", inputChannel) && !_ducking)
+				if (_onGround && _ce.input.justDid(HeroActions.JUMP, inputChannel) && !_ducking)
 				{
 					if(isInverted){
 						velocity.y = jumpHeight;
@@ -336,7 +338,7 @@ package com.hero
 					onJump.dispatch();
 				}
 				
-				if (_ce.input.isDoing("jump", inputChannel) && !_onGround && velocity.y < 0)
+				if (_ce.input.isDoing(HeroActions.JUMP, inputChannel) && !_onGround && velocity.y < 0)
 				{
 					if(isInverted){
 						velocity.y += jumpAcceleration;
@@ -347,7 +349,7 @@ package com.hero
 				
 				if (_springOffEnemy != -1)
 				{
-					if (_ce.input.isDoing("jump", inputChannel))
+					if (_ce.input.isDoing(HeroActions.JUMP, inputChannel))
 						velocity.y = -enemySpringJumpHeight;
 					else
 						velocity.y = -enemySpringHeight;
@@ -366,11 +368,12 @@ package com.hero
 		
 		private function updateShadowPosition():void
 		{
-			//shadow.x = this.x - this.width/2 - this.getCamPos().x;
-			//shadow.y = this.y - this.height/2 - this.getCamPos().y;
+			//shadow.x = this.x - this.width/2 - _cam.transformMatrix.transformPoint(new Point(0,0)).x;
+			shadow.x = this.x - this.width/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
+			shadow.y = this.y - this.height/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
 			
-			shadow.x = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).x;
-			shadow.y = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).y;
+			//shadow.x = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).x;
+			//shadow.y = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).y;
 		}
 		
 		private function updateRocksPosition():void
@@ -596,6 +599,12 @@ package com.hero
 		public function setMaxFlashlightEnergy(value:int):void
 		{
 			maxFlashlightEnergy = value;
+		}
+		
+		public function setCam(value:ACitrusCamera):void
+		{
+			_cam = value;
+			_camPos = _cam.transformMatrix.transformPoint(new Point(0,0));
 		}
 	}
 }

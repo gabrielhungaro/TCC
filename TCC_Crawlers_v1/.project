@@ -16,9 +16,24 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>[source path] src</name>
+			<name>[source path] Citrus-Engine-src</name>
+			<type>2</type>
+			<location>C:/GitHub/Citrus-Engine/src</location>
+		</link>
+		<link>
+			<name>[source path] GreenSock-AS3-src</name>
 			<type>2</type>
 			<location>C:/GitHub/GreenSock-AS3/src</location>
+		</link>
+		<link>
+			<name>[source path] as3-signals</name>
+			<type>2</type>
+			<location>C:/GitHub/as3-signals</location>
+		</link>
+		<link>
+			<name>[source path] srclib</name>
+			<type>2</type>
+			<location>C:/GitHub/Citrus-Engine/srclib</location>
 		</link>
 	</linkedResources>
 </projectDescription>

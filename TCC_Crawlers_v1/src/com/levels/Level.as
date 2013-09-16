@@ -1,7 +1,6 @@
 package com.levels
 {
 	import com.Bat;
-	import com.ImageConstants;
 	import com.Spike;
 	import com.Spike2;
 	import com.hero.MyHero;
@@ -24,6 +23,8 @@ package com.levels
 	import citrus.physics.box2d.Box2D;
 	import citrus.utils.objectmakers.ObjectMaker2D;
 	
+	import org.osflash.signals.Signal;
+	
 	public class Level extends State implements ILevel
 	{
 		public var _levelSWF:MovieClip;
@@ -39,9 +40,13 @@ package com.levels
 		private var isInverted:Boolean;
 		private var yGravity:Number;
 		
-		public function Level()
+		public var lvlEnded:Signal;
+		public var restartLevel:Signal;
+		
+		public function Level(levelSWF:MovieClip = null)
 		{
 			super();
+			this._levelSWF = levelSWF;
 			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack]
 		}
 		
@@ -55,6 +60,9 @@ package com.levels
 			add(box2D);
 			
 			addBackground();
+			
+			lvlEnded = new Signal();
+			restartLevel = new Signal();
 			
 			ObjectMaker2D.FromMovieClip(_levelSWF);
 			
@@ -71,8 +79,10 @@ package com.levels
 		
 		public function setUpCamera():void
 		{
-			view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
-			view.camera.restrictZoom = true;
+			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new Point(.25, .05));
+			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
+			view.camera.allowZoom = true;
+			//view.camera.restrictZoom = true;
 			
 			//LIBERA A ROTAÇÃO DA CAMERA
 			view.camera.allowRotation = true;
@@ -83,6 +93,8 @@ package com.levels
 			hero = getObjectByName("Hero") as MyHero;
 			hero.name = "Hero";
 			hero.setState(this);
+			hero.setCam(view.camera);
+			//hero.setCamPos(view.camera.camPos);
 			hero.setWorld(this.box2D.world);
 			hero.setWorldScale(this.box2D.scale);
 			hero.setInitialPos(new Point(hero.x, hero.y))
@@ -117,7 +129,8 @@ package com.levels
 				isInverted = false;
 			}*/
 			view.camera.rotate(Math.PI);
-			view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
+			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new Point(.25, .05));
+			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			//trace("Invertendo tudo" + box2D.world.GetGravity().y);
 			yGravity = box2D.world.GetGravity().y * (-1);
 			box2D.world.SetGravity(new b2Vec2(0, yGravity));

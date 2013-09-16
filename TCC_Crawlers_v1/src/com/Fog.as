@@ -5,6 +5,8 @@ package com
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Point;
+	
+	import citrus.view.ACitrusCamera;
 
 	public class Fog extends Sprite
 	{
@@ -14,7 +16,7 @@ package com
 		private var point:Point;
 		private var targetPoint:Point;
 		private var stageOriginal:MovieClip;
-		private var _camPoint:Point;
+		private var _cam:ACitrusCamera;
 		private var isInverted:Boolean;
 		private var originalScale:Number = 1;
 		private var risezedScale:Number = 2;
@@ -33,10 +35,10 @@ package com
 		private var FLASHLIGHT_LIGHT:String = "flashlight";
 		private var usingFlashlight:Boolean;
 		
-		public function Fog(target:Object, camPoint:Point, _x:int, _y:int, _width:int, _height:int)
+		public function Fog(target:Object, cam:ACitrusCamera, _x:int, _y:int, _width:int, _height:int)
 		{
 			_target = target;
-			_camPoint = camPoint;
+			_cam = cam;
 			
 			targetPoint = new Point(target.x, target.y);
 			fog = new Sprite();
@@ -75,11 +77,11 @@ package com
 			updateLightSize();
 			
 			if(isInverted){
-				_heroLight.x = _camPoint.x - _target.x;
-				_heroLight.y = _camPoint.y - _target.y;
+				_heroLight.x = _cam.transformMatrix.transformPoint(new Point(0,0)).x + _target.x;
+				_heroLight.y = _cam.transformMatrix.transformPoint(new Point(0,0)).y + _target.y;
 			}else{
-				_heroLight.x = _target.x - _camPoint.x;
-				_heroLight.y = _target.y - _camPoint.y;		
+				_heroLight.x = _target.x + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
+				_heroLight.y = _target.y + _cam.transformMatrix.transformPoint(new Point(0,0)).y;		
 			}
 			
 			if(isWithCamera){

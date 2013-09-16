@@ -23,6 +23,7 @@ package com.objects
 				//addTutorialScreen("Você pegou a tocha, com ela seu campo de visão aumenta, porém vai diminuindo com o tempo, para utilizá-la novamente precione a tecla 'C'!");
 				contact.GetFixtureA().GetBody().GetUserData().setWithFlashlight(true);
 				_ce.state.remove(this);
+				//_ce.levelManager.nextLevel();
 			}
 		}
 	}
