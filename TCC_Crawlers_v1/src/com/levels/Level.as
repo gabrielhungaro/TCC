@@ -17,11 +17,11 @@ package com.levels
 	
 	import citrus.core.CitrusEngine;
 	import citrus.core.State;
-	import citrus.math.MathVector;
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
 	import citrus.utils.objectmakers.ObjectMaker2D;
+	import citrus.view.spriteview.SpriteView;
 	
 	import org.osflash.signals.Signal;
 	
@@ -43,6 +43,8 @@ package com.levels
 		public var lvlEnded:Signal;
 		public var restartLevel:Signal;
 		
+		private var viewRoot:SpriteView;
+		
 		public function Level(levelSWF:MovieClip = null)
 		{
 			super();
@@ -54,6 +56,8 @@ package com.levels
 		{
 			super.initialize();
 			_ce = CitrusEngine.getInstance();
+			
+			viewRoot = this._realState.view as SpriteView;
 			
 			box2D = new Box2D("box2D");
 			box2D.visible = false;
@@ -94,6 +98,7 @@ package com.levels
 			hero.name = "Hero";
 			hero.setState(this);
 			hero.setCam(view.camera);
+			hero.setViewRoot(viewRoot.viewRoot);
 			//hero.setCamPos(view.camera.camPos);
 			hero.setWorld(this.box2D.world);
 			hero.setWorldScale(this.box2D.scale);

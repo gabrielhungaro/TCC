@@ -65,6 +65,7 @@ package com.hero
 		private var maxFlashlightEnergy:int = 100;
 		private var minFlashlightEnergy:int = 10;
 		private var _cam:ACitrusCamera;
+		private var _viewRoot:Sprite;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -96,7 +97,7 @@ package com.hero
 			shadow.setHero(this);
 			//shadow.x = hero.x - hero.width/2;
 			//shadow.y = hero.y - hero.height/2;
-			_ce.addChild(shadow);
+			_viewRoot.addChild(shadow);
 			shadow.addEventListener(MouseEvent.CLICK, onClickShadow);
 		}
 		
@@ -369,8 +370,8 @@ package com.hero
 		private function updateShadowPosition():void
 		{
 			//shadow.x = this.x - this.width/2 - _cam.transformMatrix.transformPoint(new Point(0,0)).x;
-			shadow.x = this.x - this.width/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
-			shadow.y = this.y - this.height/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
+			shadow.x = this.x;// - this.width/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
+			shadow.y = this.y;// - this.height/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
 			
 			//shadow.x = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).x;
 			//shadow.y = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).y;
@@ -605,6 +606,16 @@ package com.hero
 		{
 			_cam = value;
 			_camPos = _cam.transformMatrix.transformPoint(new Point(0,0));
+		}
+		
+		public function setViewRoot(value:Sprite):void
+		{
+			_viewRoot = value;
+		}
+		
+		public function getViewRoot():Sprite
+		{
+			return _viewRoot;
 		}
 	}
 }
