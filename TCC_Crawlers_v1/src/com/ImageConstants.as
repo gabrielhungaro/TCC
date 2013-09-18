@@ -10,6 +10,8 @@ package com
 		public static const FLASHLIGHT:String = "../lib/flashlight_resize.png";
 		public static const TORCH:String = "../lib/torch_resize.png";
 		public static const BAT:String = "../lib/bat_resize.png";
+		public static const DOOR:String = "../lib/door.png";
+		public static const SPIKE:String = "../lib/spike_resize.png";
 		
 		public function ImageConstants()
 		{

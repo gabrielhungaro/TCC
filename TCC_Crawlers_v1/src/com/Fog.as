@@ -200,5 +200,17 @@ package com
 		{
 			FRAME_RATE = value;
 		}
+		
+		public function destroy():void
+		{
+			this.removeEventListener(Event.ENTER_FRAME, update);
+			fog = null;
+			_heroLight = null;
+			_target = null;
+			point = null;
+			targetPoint = null;
+			stageOriginal = null;
+			_cam = null;
+		}
 	}
 }

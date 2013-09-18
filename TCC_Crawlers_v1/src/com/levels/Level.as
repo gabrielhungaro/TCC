@@ -4,6 +4,7 @@ package com.levels
 	import com.Spike;
 	import com.Spike2;
 	import com.hero.MyHero;
+	import com.objects.Door;
 	import com.objects.Flashlight;
 	import com.objects.Stack;
 	import com.objects.Torch;
@@ -44,12 +45,15 @@ package com.levels
 		public var restartLevel:Signal;
 		
 		private var viewRoot:SpriteView;
+		private var bg:CitrusSprite;
 		
 		public function Level(levelSWF:MovieClip = null)
 		{
 			super();
 			this._levelSWF = levelSWF;
-			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack]
+			lvlEnded = new Signal();
+			restartLevel = new Signal();
+			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack, Door]
 		}
 		
 		override public function initialize():void
@@ -65,9 +69,6 @@ package com.levels
 			
 			addBackground();
 			
-			lvlEnded = new Signal();
-			restartLevel = new Signal();
-			
 			ObjectMaker2D.FromMovieClip(_levelSWF);
 			
 			createHero();
@@ -76,16 +77,18 @@ package com.levels
 		
 		public function addBackground(imageURL:String = ""):void
 		{
-			var bg:CitrusSprite = new CitrusSprite("background", {view: imageURL, width:10, height:stage.stageHeight});
+			bg = new CitrusSprite("background", {view: imageURL/*, width:10, height:stage.stageHeight*/});
 			bg.parallaxX = 1;
 			add(bg);
 		}
 		
 		public function setUpCamera():void
 		{
-			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new Point(.25, .05));
+			trace(bg.width, bg.height);
+			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1500, 1500), new Point(.25, .05));
 			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			view.camera.allowZoom = true;
+			//view.camera.boundsMode = ACitrusCamera.BOUNDS_MODE_ADVANCED;
 			//view.camera.restrictZoom = true;
 			
 			//LIBERA A ROTAÇÃO DA CAMERA
@@ -141,6 +144,12 @@ package com.levels
 			box2D.world.SetGravity(new b2Vec2(0, yGravity));
 			//_ce.rotation += 5;
 			//hero.setInverted(isInverted);
+		}
+		
+		override public function destroy():void
+		{
+			hero.destroy();
+			super.destroy();
 		}
 		
 		public function getTicks():int

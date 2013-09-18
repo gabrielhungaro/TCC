@@ -3,6 +3,8 @@ package com
 	import com.levels.Level;
 	import com.levels.Level1State;
 	import com.levels.Level2State;
+	import com.levels.Level3State;
+	import com.levels.Level4State;
 	
 	import flash.display.Loader;
 	import flash.display.MovieClip;
@@ -13,7 +15,7 @@ package com
 	import flash.system.Security;
 	
 	import citrus.core.CitrusEngine;
-	import citrus.core.State;
+	import citrus.core.IState;
 	import citrus.input.controllers.Keyboard;
 	import citrus.utils.LevelManager;
 	
@@ -24,7 +26,7 @@ package com
 		private var level1State:Level1State;
 		private var debugSprite:Sprite = new Sprite();
 		
-		[Embed(source="../../levels/level1.swf")]
+		[Embed(source="../../lib/level1Teste.swf")]
 		private var level1:Class;
 		
 		public function TCC_Citrus_Test()
@@ -34,18 +36,22 @@ package com
 			
 			//this.console.addCommand("invert", invertAll);
 			
-			/*levelManager = new LevelManager(Level);
+			var teste:MovieClip = new level1();
+			//this.addChild(teste);
+			
+			var mc:Level1 = new Level1();
+			//level1State = new Level1State(mc, debugSprite);
+			//state = level1State;
+			
+			levelManager = new LevelManager(Level);
 			levelManager.applicationDomain = ApplicationDomain.currentDomain; 
-			levelManager.levels = [Level1State, new Level1()];
 			levelManager.onLevelChanged.add(_onLevelChanged);
+			levelManager.levels = [[Level1State, "../lib/level1Teste.swf"], [Level2State, "../lib/level2Teste.swf"], [Level3State, "../lib/level3Teste.swf"], [Level4State, "../lib/level4Teste.swf"]];
 			//levelManager.levels = [[Level1, "levels/A1/LevelA1.swf"], [Level2, "levels/A2/LevelA2.swf"]];
 			levelManager.gotoLevel(); //load the first level, you can change the index. You can also call it later.
-			//levelManager.levels = [[Level1State, "level1.swf"], [level2, "level2.swf"]]; */
+			//levelManager.levels = [[Level1State, "level1.swf"], [level2, "level2.swf"]]; 
 			
 			//TODO tirar essa merda daqui substituir pelo carregamento correto
-			var mc:Level1 = new Level1();
-			level1State = new Level1State(mc, debugSprite);
-			state = level1State;
 			
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handlerLoadCompelete);
@@ -55,7 +61,7 @@ package com
 			//this.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		}
 		
-		/*private function _onLevelChanged(lvl:Level):void {
+		private function _onLevelChanged(lvl:Level):void {
 			
 			state = lvl;
 			
@@ -70,8 +76,8 @@ package com
 		
 		private function _restartLevel():void {
 			
-			state = levelManager.currentLevel as State;
-		}*/
+			state = levelManager.currentLevel as IState;
+		}
 		
 		protected function onKeyDown(event:KeyboardEvent):void
 		{

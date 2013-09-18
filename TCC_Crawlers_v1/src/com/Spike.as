@@ -12,7 +12,7 @@ package com
 		public function Spike(name:String, params:Object=null)
 		{
 			super(name, params);
-			
+			this.view = ImageConstants.SPIKE;
 			this.endX = 70;
 			this.endY = 100;
 			this.onBeginContact.add(activeTeleport);

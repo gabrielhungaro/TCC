@@ -5,10 +5,6 @@ package com.levels
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	
-	import citrus.math.MathVector;
 	
 	public class Level2State extends Level
 	{
@@ -36,25 +32,6 @@ package com.levels
 		override public function addBackground(imageURL:String=""):void
 		{
 			super.addBackground(ImageConstants.BACKGROUND_TUTORIAL2);
-		}
-		
-		private function setUpCamera():void
-		{
-			view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
-			view.camera.restrictZoom = true;
-			
-			//LIBERA A ROTAÇÃO DA CAMERA
-			view.camera.allowRotation = true;
-		}
-		
-		private function createHero():void
-		{
-			hero = getObjectByName("Hero") as MyHero;
-			hero.setState(this);
-			hero.setWorld(this.box2D.world);
-			hero.setWorldScale(this.box2D.scale);
-			hero.setInitialPos(new Point(hero.x + 100, hero.y))
-			hero.init();
 		}
 	}
 }

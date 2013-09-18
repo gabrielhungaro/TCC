@@ -79,10 +79,8 @@ package com.hero
 			insanityTime = insanityTime*FRAME_RATE;
 			setDebugInsanity(true);
 			//_camPos = iLevel.getCamPos();
-			fog = new Fog(this, _cam, 0, 0, _ce.stage.stageWidth, _ce.stage.stageHeight);
-			fog.setFrameRate(FRAME_RATE);
-			fog.init();
-			_ce.addChild(fog);
+			createFog();
+			
 			drawInsanityBar();
 			arrayOfRocks = new Vector.<Rock>;
 			
@@ -90,15 +88,46 @@ package com.hero
 			createShadow();
 		}
 		
+		private function createFog():void
+		{
+			if(!fog){
+				fog = new Fog(this, _cam, 0, 0, _ce.stage.stageWidth, _ce.stage.stageHeight);
+				fog.setFrameRate(FRAME_RATE);
+				fog.init();
+				_ce.addChild(fog);
+			}
+		}
+		
+		private function removeFog():void
+		{
+			if(fog){
+				if(_ce.contains(fog)){
+					_ce.removeChild(fog);
+					fog.destroy();
+					fog = null;
+				}
+			}
+		}
+		
 		private function createShadow():void
 		{
 			shadow = new Shadow();
 			//shadow.setAsset(hero.getViewAsMovieClip());
 			shadow.setHero(this);
-			//shadow.x = hero.x - hero.width/2;
-			//shadow.y = hero.y - hero.height/2;
+			shadow.x = this.x - this.width/2;
+			shadow.y = this.y - this.height/2;
 			_viewRoot.addChild(shadow);
 			shadow.addEventListener(MouseEvent.CLICK, onClickShadow);
+		}
+		
+		private function removeShadow():void
+		{
+			if(shadow){
+				if(_viewRoot.contains(shadow)){
+					_viewRoot.removeChild(shadow);
+					shadow = null;
+				}
+			}
 		}
 		
 		protected function onClickShadow(event:MouseEvent):void
@@ -123,17 +152,31 @@ package com.hero
 			insanityBarBackgorund = new Sprite();
 			insanityBarBackgorund.graphics.beginFill(0x888888, .6);
 			insanityBarBackgorund.graphics.drawRect(10, 10, 210, 40);
-			_ce.addChild(insanityBarBackgorund);
+			_ce.stage.addChild(insanityBarBackgorund);
 			
 			insanityBar = new Sprite();
 			insanityBar.graphics.beginFill(0x0000FF, .6);
 			insanityBar.graphics.drawRect(15, 15, 200, 30);
-			_ce.addChild(insanityBar);
+			_ce.stage.addChild(insanityBar);
 			insanityBar.scaleX = 0;
 			
 			if(!insanityDebug){
 				insanityBarBackgorund.visible = false;
 				insanityBar.visible = false;
+			}
+		}
+		
+		private function removeInsanityBar():void
+		{
+			if(insanityBarBackgorund){
+				if(_ce.stage.contains(insanityBarBackgorund)){
+					_ce.stage.removeChild(insanityBarBackgorund);
+				}
+			}
+			if(insanityBar){
+				if(_ce.stage.contains(insanityBar)){
+					_ce.stage.removeChild(insanityBar);
+				}
 			}
 		}
 		
@@ -370,8 +413,8 @@ package com.hero
 		private function updateShadowPosition():void
 		{
 			//shadow.x = this.x - this.width/2 - _cam.transformMatrix.transformPoint(new Point(0,0)).x;
-			shadow.x = this.x;// - this.width/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
-			shadow.y = this.y;// - this.height/2 + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
+			shadow.x = this.x - this.width/2;// + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
+			shadow.y = this.y - this.height/2;// + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
 			
 			//shadow.x = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).x;
 			//shadow.y = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).y;
@@ -461,6 +504,38 @@ package com.hero
 			}
 		}
 		
+		public function useCamera():void
+		{
+			addInsanity(10);
+			insanity += 10;
+			cameraUsed = true;
+			fog.useCamera();
+		}
+		
+		public function addInsanity(value:int):void
+		{
+			insanity += value;
+		}
+		
+		public function useFlashlight():void
+		{
+			if(this.isWithFlashlight && this.flashlightEnergy > this.minFlashlightEnergy){
+				usingFlashlight = true;
+				fog.useFlashlight();
+			}else if(this.isWithFlashlight && this.usingFlashlight){
+				usingFlashlight = false;
+				fog.useFlashlight();
+			}
+		}
+		
+		override public function destroy():void
+		{
+			removeFog();
+			removeShadow();
+			removeInsanityBar();
+			super.destroy();
+		}
+		
 		public function setInverted(value:Boolean):void
 		{
 			isInverted = value;
@@ -490,24 +565,6 @@ package com.hero
 		public function setState(value:ILevel):void
 		{
 			iLevel = value;
-		}
-		
-		public function useCamera():void
-		{
-			insanity += 10;
-			cameraUsed = true;
-			fog.useCamera();
-		}
-		
-		public function useFlashlight():void
-		{
-			if(this.isWithFlashlight && this.flashlightEnergy > this.minFlashlightEnergy){
-				usingFlashlight = true;
-				fog.useFlashlight();
-			}else if(this.isWithFlashlight && this.usingFlashlight){
-				usingFlashlight = false;
-				fog.useFlashlight();
-			}
 		}
 		
 		public function setInitialPos(value:Point):void
