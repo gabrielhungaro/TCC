@@ -46,6 +46,7 @@ package com.levels
 		
 		private var viewRoot:SpriteView;
 		private var bg:CitrusSprite;
+		private var upImage:CitrusSprite;
 		
 		public function Level(levelSWF:MovieClip = null)
 		{
@@ -73,6 +74,8 @@ package com.levels
 			
 			createHero();
 			setUpCamera();
+			
+			addUpPart();
 		}
 		
 		public function addBackground(imageURL:String = ""):void
@@ -82,10 +85,17 @@ package com.levels
 			add(bg);
 		}
 		
+		public function addUpPart(imageURL:String = ""):void
+		{
+			upImage = new CitrusSprite("upImage", {view: imageURL/*, width:10, height:stage.stageHeight*/});
+			upImage.parallaxX = 1;
+			add(upImage);
+		}
+		
 		public function setUpCamera():void
 		{
 			trace(bg.width, bg.height);
-			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1500, 1500), new Point(.25, .05));
+			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, _levelSWF.width, _levelSWF.height), new Point(.25, .05));
 			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			view.camera.allowZoom = true;
 			//view.camera.boundsMode = ACitrusCamera.BOUNDS_MODE_ADVANCED;
