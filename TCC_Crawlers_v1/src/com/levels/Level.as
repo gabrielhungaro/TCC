@@ -6,6 +6,8 @@ package com.levels
 	import com.hero.MyHero;
 	import com.objects.Door;
 	import com.objects.Flashlight;
+	import com.objects.NextLevel;
+	import com.objects.PrevLevel;
 	import com.objects.Stack;
 	import com.objects.Torch;
 	
@@ -54,7 +56,7 @@ package com.levels
 			this._levelSWF = levelSWF;
 			lvlEnded = new Signal();
 			restartLevel = new Signal();
-			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack, Door]
+			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack, NextLevel, PrevLevel]
 		}
 		
 		override public function initialize():void
@@ -65,7 +67,7 @@ package com.levels
 			viewRoot = this._realState.view as SpriteView;
 			
 			box2D = new Box2D("box2D");
-			box2D.visible = false;
+			box2D.visible = true;
 			add(box2D);
 			
 			addBackground();
@@ -94,7 +96,7 @@ package com.levels
 		
 		public function setUpCamera():void
 		{
-			trace(bg.width, bg.height);
+			trace(_levelSWF.width, _levelSWF.height);
 			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, _levelSWF.width, _levelSWF.height), new Point(.25, .05));
 			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			view.camera.allowZoom = true;
@@ -115,7 +117,7 @@ package com.levels
 			//hero.setCamPos(view.camera.camPos);
 			hero.setWorld(this.box2D.world);
 			hero.setWorldScale(this.box2D.scale);
-			hero.setInitialPos(new Point(hero.x, hero.y))
+			hero.setInitialPos(new Point(hero.x, hero.y));
 			hero.init();
 		}
 		

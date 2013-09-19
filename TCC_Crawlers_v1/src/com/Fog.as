@@ -75,15 +75,16 @@ package com
 			}
 			//updateLightType();
 			updateLightSize();
-			
+			//trace(_cam.transformMatrix.transformPoint(new Point(0,0)));
 			if(isInverted){
-				_heroLight.x = _cam.transformMatrix.transformPoint(new Point(0,0)).x + _target.x;
-				_heroLight.y = _cam.transformMatrix.transformPoint(new Point(0,0)).y + _target.y;
+				_heroLight.x = _cam.transformMatrix.transformPoint(new Point(0,0)).x/2 - _target.x;
+				_heroLight.y = _cam.transformMatrix.transformPoint(new Point(0,0)).y/2 - _target.y;
 			}else{
 				_heroLight.x = _target.x + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
 				_heroLight.y = _target.y + _cam.transformMatrix.transformPoint(new Point(0,0)).y;		
 			}
 			
+			trace(_heroLight.x, _heroLight.y);
 			if(isWithCamera){
 				_heroLight.rotation = Math.atan2(mouseY - _heroLight.y, mouseX - _heroLight.x)*radToDeg;
 				if((ticks % timerWithCamera * FRAME_RATE) == 0){

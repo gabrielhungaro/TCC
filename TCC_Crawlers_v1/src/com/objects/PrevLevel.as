@@ -7,9 +7,9 @@ package com.objects
 	
 	import citrus.objects.platformer.box2d.Sensor;
 	
-	public class Door extends Sensor
+	public class PrevLevel extends Sensor
 	{
-		public function Door(name:String, params:Object=null)
+		public function PrevLevel(name:String, params:Object=null)
 		{
 			super(name, params);
 			this.view = ImageConstants.DOOR;
@@ -20,7 +20,7 @@ package com.objects
 		{
 			trace("Entrou na porta");
 			if(contact.GetFixtureA().GetBody().GetUserData() is MyHero){
-				_ce.levelManager.nextLevel();
+				_ce.levelManager.prevLevel();
 			}
 		}
 	}

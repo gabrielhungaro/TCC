@@ -66,6 +66,7 @@ package com.hero
 		private var minFlashlightEnergy:int = 10;
 		private var _cam:ACitrusCamera;
 		private var _viewRoot:Sprite;
+		private var shadowPos:Point;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -77,12 +78,14 @@ package com.hero
 		{
 			FRAME_RATE = _ce.stage.frameRate;
 			insanityTime = insanityTime*FRAME_RATE;
-			setDebugInsanity(true);
+			setDebugInsanity(false);
 			//_camPos = iLevel.getCamPos();
 			createFog();
 			
 			drawInsanityBar();
 			arrayOfRocks = new Vector.<Rock>;
+			
+			shadowPos = new Point(this.x, this.y + this.height);
 			
 			setupHeroAction();
 			createShadow();
@@ -114,8 +117,8 @@ package com.hero
 			shadow = new Shadow();
 			//shadow.setAsset(hero.getViewAsMovieClip());
 			shadow.setHero(this);
-			shadow.x = this.x - this.width/2;
-			shadow.y = this.y - this.height/2;
+			shadow.x = shadowPos.x;
+			shadow.y = shadowPos.y;
 			_viewRoot.addChild(shadow);
 			shadow.addEventListener(MouseEvent.CLICK, onClickShadow);
 		}
@@ -413,8 +416,10 @@ package com.hero
 		private function updateShadowPosition():void
 		{
 			//shadow.x = this.x - this.width/2 - _cam.transformMatrix.transformPoint(new Point(0,0)).x;
-			shadow.x = this.x - this.width/2;// + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
-			shadow.y = this.y - this.height/2;// + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
+			shadowPos.x = this.x;
+			shadowPos.y = this.y + this.height/2;
+			shadow.x = shadowPos.x;// + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
+			shadow.y = shadowPos.y;// + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
 			
 			//shadow.x = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).x;
 			//shadow.y = _ce.localToGlobal(new Point(this.x - this.width/2 - this.getCamPos().x, this.y - this.height/2 - this.getCamPos().y)).y;

@@ -41,8 +41,8 @@ package com
 		
 		private function hit(contact:b2Contact):void
 		{
-			trace("hitado pelo morcego");
 			if(contact.GetFixtureA().GetBody().GetUserData() is MyHero){
+				trace("hitado pelo morcego");
 				contact.GetFixtureA().GetBody().GetUserData().addInsanity(15);
 			}
 		}

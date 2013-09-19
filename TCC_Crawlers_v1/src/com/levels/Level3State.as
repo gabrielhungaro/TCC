@@ -22,11 +22,6 @@ package com.levels
 		override public function initialize():void
 		{
 			super.initialize();
-			
-			//ObjectMaker2D.FromMovieClip(_levelSWF);
-			
-			//createHero();
-			//setUpCamera();
 		}
 		
 		override public function addBackground(imageURL:String=""):void
