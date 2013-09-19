@@ -5,6 +5,7 @@ package com
 	import com.levels.Level2State;
 	import com.levels.Level3State;
 	import com.levels.Level4State;
+	import com.states.MainMenu;
 	
 	import flash.display.Loader;
 	import flash.display.MovieClip;
@@ -23,6 +24,7 @@ package com
 	public class TCC_Citrus_Test extends CitrusEngine
 	{
 		Security.allowDomain("*");
+		private var mainMenu:MainMenu;
 		private var level1State:Level1State;
 		private var debugSprite:Sprite = new Sprite();
 		
@@ -43,12 +45,15 @@ package com
 			//level1State = new Level1State(mc, debugSprite);
 			//state = level1State;
 			
+			mainMenu = new MainMenu();
+			state = mainMenu;
+			
 			levelManager = new LevelManager(Level);
 			levelManager.applicationDomain = ApplicationDomain.currentDomain; 
 			levelManager.onLevelChanged.add(_onLevelChanged);
 			levelManager.levels = [[Level1State, "../lib/level1Teste.swf"], [Level2State, "../lib/level2Teste.swf"], [Level3State, "../lib/level3Teste.swf"], [Level4State, "../lib/level4Teste.swf"]];
 			//levelManager.levels = [[Level1, "levels/A1/LevelA1.swf"], [Level2, "levels/A2/LevelA2.swf"]];
-			levelManager.gotoLevel(); //load the first level, you can change the index. You can also call it later.
+			//levelManager.gotoLevel(); //load the first level, you can change the index. You can also call it later.
 			//levelManager.levels = [[Level1State, "level1.swf"], [level2, "level2.swf"]]; 
 			
 			//TODO tirar essa merda daqui substituir pelo carregamento correto

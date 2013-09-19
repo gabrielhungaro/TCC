@@ -75,7 +75,7 @@ package com.levels
 			createHero();
 			setUpCamera();
 			
-			addUpPart();
+			//addUpPart();
 		}
 		
 		public function addBackground(imageURL:String = ""):void

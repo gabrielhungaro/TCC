@@ -2,7 +2,7 @@ package com
 {
 	public class ImageConstants
 	{
-		public static const HERO:String = "../lib/hero.swf";
+		public static const HERO:String = "../lib/hero_resize.png";
 		public static const BACKGROUND_TUTORIAL1:String = "../lib/bg_tutorial1.jpg";
 		public static const UP_PART_TUTORIAL1:String = "../lib/bg_tutorial1_up.png";
 		public static const BACKGROUND_TUTORIAL2:String = "../lib/bg_tutorial2.jpg";

@@ -32,6 +32,10 @@ package com.levels
 		override public function addBackground(imageURL:String=""):void
 		{
 			super.addBackground(ImageConstants.BACKGROUND_TUTORIAL1);
+		}
+		
+		override public function addUpPart(imageURL:String=""):void
+		{
 			super.addUpPart(ImageConstants.UP_PART_TUTORIAL1);
 		}
 	}
