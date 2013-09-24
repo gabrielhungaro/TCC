@@ -9,6 +9,7 @@ package com.hero
 		public static const ACTION:String = "action";
 		public static const CAMERA:String = "camera";
 		public static const FLASHLIGHT:String = "flashlight";
+		public static const BACKPACK:String = "backpack";
 		
 		public function HeroActions()
 		{

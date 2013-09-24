@@ -148,6 +148,7 @@ package com.hero
 			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z, inputChannel);
 			keyboard.addKeyAction(HeroActions.CAMERA, Keyboard.SHIFT, inputChannel);
 			keyboard.addKeyAction(HeroActions.FLASHLIGHT, Keyboard.X, inputChannel);
+			keyboard.addKeyAction(HeroActions.BACKPACK, Keyboard.P, inputChannel);
 		}
 		
 		private function drawInsanityBar():void
@@ -330,6 +331,11 @@ package com.hero
 					useFlashlight();
 				}
 				
+				if(_ce.input.justDid(HeroActions.BACKPACK, inputChannel))
+				{
+					openBackPack();
+				}
+				
 				if(_ce.input.justDid(HeroActions.INVERT, inputChannel))
 				{
 					invertWorld();
@@ -411,6 +417,12 @@ package com.hero
 			}
 			
 			updateAnimation();
+		}
+		
+		private function openBackPack():void
+		{
+			// TODO Auto Generated method stub
+			
 		}
 		
 		private function updateShadowPosition():void
