@@ -1,5 +1,6 @@
 package com.hero
 {
+	import com.Backpack;
 	import com.Fog;
 	import com.ImageConstants;
 	import com.levels.ILevel;
@@ -68,10 +69,34 @@ package com.hero
 		private var _viewRoot:Sprite;
 		private var shadowPos:Point;
 		
+		private var backpack:Backpack;
+		
+		public static var okToCreate:Boolean = true;
+		public static var instace:MyHero;
+		public static var HeroName:String
+		public static var HeroParams:Object;
+		private var keyboard:Keyboard;
+		
 		public function MyHero(name:String, params:Object=null)
 		{
-			super(name, params);
-			this.view = ImageConstants.HERO;
+			HeroName = name;
+			HeroParams = params;
+			if(okToCreate){
+				super(name, params);
+				this.view = ImageConstants.HERO;
+			}else{
+				
+			}
+		}
+		
+		public static function getInstace():MyHero
+		{
+			if(instace == null){
+				okToCreate = true;
+				instace = new MyHero(HeroName, HeroParams);
+				okToCreate = false
+			}
+			return instace;
 		}
 		
 		public function init():void
@@ -140,15 +165,14 @@ package com.hero
 		
 		private function setupHeroAction():void
 		{
-			
-			var keyboard:Keyboard = _ce.input.keyboard as Keyboard;
+			keyboard = _ce.input.keyboard as Keyboard;
 			keyboard.addKeyAction("fly", Keyboard.F, inputChannel);
-			keyboard.addKeyAction(HeroActions.LEFT, Keyboard.A, inputChannel);
-			keyboard.addKeyAction(HeroActions.RIGHT, Keyboard.D, inputChannel);
-			keyboard.addKeyAction(HeroActions.INVERT, Keyboard.Z, inputChannel);
-			keyboard.addKeyAction(HeroActions.CAMERA, Keyboard.SHIFT, inputChannel);
-			keyboard.addKeyAction(HeroActions.FLASHLIGHT, Keyboard.X, inputChannel);
-			keyboard.addKeyAction(HeroActions.BACKPACK, Keyboard.P, inputChannel);
+			keyboard.addKeyAction(HeroActions.LEFT, HeroActions.LEFT_KEY, inputChannel);
+			keyboard.addKeyAction(HeroActions.RIGHT, HeroActions.RIGHT_KEY, inputChannel);
+			keyboard.addKeyAction(HeroActions.INVERT, HeroActions.INVERT_KEY, inputChannel);
+			keyboard.addKeyAction(HeroActions.HIGH_FLASHLIGHT, HeroActions.HIGH_FLASHLIGHT_KEY, inputChannel);
+			keyboard.addKeyAction(HeroActions.FLASHLIGHT, HeroActions.FLASHLIGHT_KEY, inputChannel);
+			keyboard.addKeyAction(HeroActions.BACKPACK, HeroActions.BACKPACK_KEY, inputChannel);
 		}
 		
 		private function drawInsanityBar():void
@@ -321,7 +345,7 @@ package com.hero
 				
 				_ducking = (_ce.input.isDoing("duck", inputChannel) && _onGround && canDuck);
 				
-				if(_ce.input.justDid(HeroActions.CAMERA, inputChannel) && !this.cameraUsed)
+				if(_ce.input.justDid(HeroActions.HIGH_FLASHLIGHT, inputChannel) && !this.cameraUsed)
 				{
 					useCamera();
 				}
@@ -421,8 +445,25 @@ package com.hero
 		
 		private function openBackPack():void
 		{
-			// TODO Auto Generated method stub
-			
+			var arrayTeste:Array = ["1", "2", "3", "4", "5", "6", "7", "8", "4", "5", "6", "7", "8", "4", "5", "6", "7", "8"]
+			backpack = new Backpack();
+			_ce.addChild(backpack);
+			backpack.x = backpack.width/2;
+			backpack.y = backpack.height/2;
+			backpack.setArrayOfItens(arrayTeste);
+			backpack.setKeyboard(keyboard);
+			backpack.setCloseFunction(closeBackpack);
+			backpack.init();
+		}
+		
+		private function closeBackpack():void
+		{
+			backpack.destroy();
+			if(backpack){
+				if(_ce.contains(backpack)){
+					_ce.removeChild(backpack);
+				}
+			}
 		}
 		
 		private function updateShadowPosition():void

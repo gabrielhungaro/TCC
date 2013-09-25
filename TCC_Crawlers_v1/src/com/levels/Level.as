@@ -4,7 +4,6 @@ package com.levels
 	import com.Spike;
 	import com.Spike2;
 	import com.hero.MyHero;
-	import com.objects.Door;
 	import com.objects.Flashlight;
 	import com.objects.NextLevel;
 	import com.objects.PrevLevel;
@@ -13,6 +12,7 @@ package com.levels
 	
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -67,7 +67,7 @@ package com.levels
 			viewRoot = this._realState.view as SpriteView;
 			
 			box2D = new Box2D("box2D");
-			box2D.visible = true;
+			box2D.visible = false;
 			add(box2D);
 			
 			addBackground();
@@ -76,8 +76,16 @@ package com.levels
 			
 			createHero();
 			setUpCamera();
+			stage.addEventListener(MouseEvent.MOUSE_WHEEL, _mouseWheel);
 			
 			//addUpPart();
+		}
+		
+		private function _mouseWheel(event:MouseEvent):void {
+			if (event.delta > 0)
+				view.camera.setZoom(view.camera.getZoom() + 0.1);
+			else if (event.delta < 0)
+				view.camera.setZoom(view.camera.getZoom() - 0.1);
 		}
 		
 		public function addBackground(imageURL:String = ""):void
@@ -109,7 +117,10 @@ package com.levels
 		
 		public function createHero():void
 		{
+			
+			//var _hero:MyHero = getObjectByName("Hero") as MyHero;
 			hero = getObjectByName("Hero") as MyHero;
+			//hero = MyHero.getInstace();
 			hero.name = "Hero";
 			hero.setState(this);
 			hero.setCam(view.camera);

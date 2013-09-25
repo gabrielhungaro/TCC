@@ -1,8 +1,11 @@
 package com.states
 {
+	import com.greensock.TweenMax;
+	
 	import flash.events.MouseEvent;
 	
 	import citrus.core.State;
+	import citrus.input.controllers.Keyboard;
 	
 	public class MainMenu extends State
 	{
@@ -10,6 +13,8 @@ package com.states
 		private var btnStart:BtnStartAsset;
 		private var btnOptions:BtnOptionsAsset;
 		private var btnCredits:BtnCreditsAsset;
+		private var optionScreen:OptionsState;
+		private var keyboard:Keyboard;
 		
 		public function MainMenu()
 		{
@@ -19,6 +24,7 @@ package com.states
 		override public function initialize():void
 		{
 			super.initialize();
+			keyboard = _ce.input.keyboard as Keyboard;
 			backgrodround = new MainMenuBackgroundAsset();
 			this.addChild(backgrodround);
 			btnStart = new BtnStartAsset();
@@ -60,20 +66,32 @@ package com.states
 		
 		protected function onClickOptions(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
-			
+			optionScreen = new OptionsState();
+			optionScreen.setCloseFunction(closeOptions);
+			optionScreen.x = optionScreen.width/2;
+			optionScreen.y = optionScreen.height/2;
+			optionScreen.setKeyboard(keyboard);
+			this.addChild(optionScreen);
 		}
 		
-		protected function onMouseOut(event:MouseEvent):void
+		private function closeOptions():void
 		{
-			// TODO Auto-generated method stub
-			
+			optionScreen.destroy();
+			if(optionScreen){
+				if(this.contains(optionScreen)){
+					this.removeChild(optionScreen);
+				}
+			}
 		}
 		
 		protected function onMouseOver(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
-			
+			TweenMax.to(event.currentTarget, 0.1, { colorTransform: { tint:0xffffff, exposure:1.3 }} );
+		}
+		
+		protected function onMouseOut(event:MouseEvent):void
+		{
+			TweenMax.to(event.currentTarget, 0.1, { colorTransform: { tint:0xffffff, exposure:1 }} );
 		}
 		
 		override public function update(timeDelta:Number):void

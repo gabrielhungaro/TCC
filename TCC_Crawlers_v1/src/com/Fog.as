@@ -84,7 +84,7 @@ package com
 				_heroLight.y = _target.y + _cam.transformMatrix.transformPoint(new Point(0,0)).y;		
 			}
 			
-			trace(_heroLight.x, _heroLight.y);
+			//trace(_heroLight.x, _heroLight.y);
 			if(isWithCamera){
 				_heroLight.rotation = Math.atan2(mouseY - _heroLight.y, mouseX - _heroLight.x)*radToDeg;
 				if((ticks % timerWithCamera * FRAME_RATE) == 0){

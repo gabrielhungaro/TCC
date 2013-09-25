@@ -48,6 +48,8 @@ package com
 			mainMenu = new MainMenu();
 			state = mainMenu;
 			
+			this.console.enabled = false;
+			
 			levelManager = new LevelManager(Level);
 			levelManager.applicationDomain = ApplicationDomain.currentDomain; 
 			levelManager.onLevelChanged.add(_onLevelChanged);
