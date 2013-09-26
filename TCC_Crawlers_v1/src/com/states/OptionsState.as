@@ -18,7 +18,7 @@ package com.states
 		private var arrayOfActions:Array = [];
 		private var keyboard:Keyboard;
 		private var actionsDic:Dictionary = new Dictionary();
-		private var arrayOfTextFields:Object;
+		private var arrayOfTextFields:Array = [];
 		public function OptionsState()
 		{
 			this.btnBack.addEventListener(MouseEvent.CLICK, onClickBack);
@@ -46,7 +46,8 @@ package com.states
 			for (var i:int = 0; i < this.numChildren; i++) 
 			{
 				if(this.getChildAt(i) is TextField){
-					arrayOfTextFields.push(this.getChildAt(i).addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown));
+					this.getChildAt(i).addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown)
+					arrayOfTextFields.push(this.getChildAt(i));
 				}
 			}
 		}
@@ -75,33 +76,41 @@ package com.states
 		protected function onKeyDown(event:KeyboardEvent):void
 		{
 			var actionName:String = event.currentTarget.name;
+			var keyName:String;
 			if(event.keyCode){
-				event.currentTarget.text = String.fromCharCode(event.charCode).toUpperCase();
+				keyName = String.fromCharCode(event.charCode).toUpperCase();
 			}
 			if(event.keyCode == Keyboard.SHIFT){
-				event.currentTarget.text = "SHIFT";
+				keyName = "SHIFT";
 			}
 			if(event.keyCode == Keyboard.CTRL){
-				event.currentTarget.text = "CTRL";
+				keyName = "CTRL";
 			}
 			if(event.keyCode == Keyboard.SPACE){
-				event.currentTarget.text = "SPACE";
+				keyName = "SPACE";
 			}
 			if(event.keyCode == Keyboard.ENTER){
-				event.currentTarget.text = "ENTER";
+				keyName = "ENTER";
 			}
 			if(event.keyCode == Keyboard.LEFT){
-				event.currentTarget.text = "LEFT";
+				keyName = "LEFT";
 			}
 			if(event.keyCode == Keyboard.RIGHT){
-				event.currentTarget.text = "RIGHT";
+				keyName = "RIGHT";
 			}
 			if(event.keyCode == Keyboard.UP){
-				event.currentTarget.text = "UP";
+				keyName = "UP";
 			}
 			if(event.keyCode == Keyboard.DOWN){
-				event.currentTarget.text = "DOWN";
+				keyName = "DOWN";
 			}
+			for (var i:int = 0; i < arrayOfTextFields.length; i++) 
+			{
+				if(arrayOfTextFields[i].text == keyName){
+					arrayOfTextFields[i].text = "-"
+				}
+			}
+			event.currentTarget.text = keyName;
 			verifyIfExistsAction(actionName, event.keyCode);
 			//trace("arrayOfActions: " + arrayOfActions);
 			//trace("arrayOfKeys: " + arrayOfKeys);
@@ -113,7 +122,10 @@ package com.states
 			for (var action:String in actionsDic) {
 				var value:uint = actionsDic[action];
 				var name:String = action;
-				trace(value, name);
+				if(value == keyCode && name != actionName){
+					actionsDic[name] = 0;
+				}
+				trace(actionsDic[name], name);
 			}
 			trace("===================================");
 			/*if(arrayOfActions.indexOf(actionName) == -1){
