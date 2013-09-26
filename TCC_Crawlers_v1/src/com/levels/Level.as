@@ -3,6 +3,7 @@ package com.levels
 	import com.Bat;
 	import com.Spike;
 	import com.Spike2;
+	import com.data.SoundList;
 	import com.hero.MyHero;
 	import com.objects.Flashlight;
 	import com.objects.NextLevel;
@@ -23,6 +24,8 @@ package com.levels
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
+	import citrus.sounds.CitrusSoundGroup;
+	import citrus.sounds.SoundManager;
 	import citrus.utils.objectmakers.ObjectMaker2D;
 	import citrus.view.spriteview.SpriteView;
 	
@@ -78,7 +81,8 @@ package com.levels
 			setUpCamera();
 			stage.addEventListener(MouseEvent.MOUSE_WHEEL, _mouseWheel);
 			
-			//addUpPart();
+			addUpPart();
+			loadSounds();
 		}
 		
 		private function _mouseWheel(event:MouseEvent):void {
@@ -98,14 +102,29 @@ package com.levels
 		public function addUpPart(imageURL:String = ""):void
 		{
 			upImage = new CitrusSprite("upImage", {view: imageURL/*, width:10, height:stage.stageHeight*/});
-			upImage.parallaxX = 1;
+			upImage.parallaxX = 1.1;
 			add(upImage);
+		}
+		
+		private function loadSounds():void
+		{
+			SoundManager.getInstance().addSound("sound1", { sound:SoundList.TUTORIAL1_SOUND, loop:false, triggerSoundComplete:true,triggerRepeatComplete:true, timesToRepeat:12 , group:CitrusSoundGroup.BGM } );
+			SoundManager.getInstance().playSound("sound1");
 		}
 		
 		public function setUpCamera():void
 		{
-			trace(_levelSWF.width, _levelSWF.height);
-			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, _levelSWF.width, _levelSWF.height), new Point(.25, .05));
+			
+			var widthBound:int = _levelSWF.width;
+			var heightBound:int = _levelSWF.height;
+			if(widthBound <= stage.stageWidth){
+				widthBound = stage.stageWidth;
+			}
+			if(heightBound <= stage.stageHeight){
+				heightBound = stage.stageHeight;
+			}
+			trace(widthBound, heightBound);
+			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, widthBound, heightBound), new Point(.25, .05));
 			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			view.camera.allowZoom = true;
 			//view.camera.boundsMode = ACitrusCamera.BOUNDS_MODE_ADVANCED;
@@ -113,6 +132,7 @@ package com.levels
 			
 			//LIBERA A ROTAÇÃO DA CAMERA
 			view.camera.allowRotation = true;
+			view.camera.reset();
 		}
 		
 		public function createHero():void
@@ -129,6 +149,7 @@ package com.levels
 			hero.setWorld(this.box2D.world);
 			hero.setWorldScale(this.box2D.scale);
 			hero.setInitialPos(new Point(hero.x, hero.y));
+			trace("hero.x, hero.y: " + hero.x, hero.y);
 			hero.init();
 		}
 		

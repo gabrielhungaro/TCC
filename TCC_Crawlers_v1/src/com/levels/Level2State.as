@@ -12,7 +12,7 @@ package com.levels
 		private var _debugSprite:Sprite;
 		private var hero:MyHero;
 		
-		public function Level2State(levelSWF:MovieClip, debugSprite:Sprite = null)
+		public function Level2State(levelSWF:MovieClip = null, debugSprite:Sprite = null)
 		{
 			super();
 			this._levelSWF = levelSWF;
@@ -27,6 +27,11 @@ package com.levels
 		override public function addBackground(imageURL:String=""):void
 		{
 			super.addBackground(ImageConstants.BACKGROUND_TUTORIAL2);
+		}
+		
+		override public function addUpPart(imageURL:String=""):void
+		{
+			super.addUpPart(ImageConstants.UP_PART_TUTORIAL1);
 		}
 	}
 }

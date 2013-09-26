@@ -3,6 +3,7 @@ package com.hero
 	import com.Backpack;
 	import com.Fog;
 	import com.ImageConstants;
+	import com.data.ASharedObject;
 	import com.levels.ILevel;
 	import com.objects.Rock;
 	
@@ -104,6 +105,7 @@ package com.hero
 			FRAME_RATE = _ce.stage.frameRate;
 			insanityTime = insanityTime*FRAME_RATE;
 			setDebugInsanity(false);
+			insanity = ASharedObject.getInstance().getHeroInsanity();
 			//_camPos = iLevel.getCamPos();
 			createFog();
 			
@@ -588,6 +590,7 @@ package com.hero
 		
 		override public function destroy():void
 		{
+			ASharedObject.getInstance().setHeroInsanity(insanity);
 			removeFog();
 			removeShadow();
 			removeInsanityBar();
