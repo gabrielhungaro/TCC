@@ -2,6 +2,18 @@ package com
 {
 	public class ImageConstants
 	{
+		public static const HERO_NAME:String = "heroImage";
+		public static const BACKGROUND_NAME:String = "backgroundImage";
+		public static const UP_PART_NAME:String = "upImage";
+		public static const BACKGROUND_TUTORIAL2_NAME:String = "tutorialImage2";
+		public static const BACKGROUND_TUTORIAL3_NAME:String = "tutorialImage3";
+		public static const BACKGROUND_TUTORIAL4_NAME:String = "tutorialImage4";
+		public static const FLASHLIGHT_NAME:String = "flashlightImage";
+		public static const TORCH_NAME:String = "torchImage";
+		public static const BAT_NAME:String = "batImage";
+		public static const DOOR_NAME:String = "doorImage";
+		public static const SPIKE_NAME:String = "spikeImage";
+		
 		public static const HERO:String = "../lib/hero_resize.png";
 		public static const BACKGROUND_TUTORIAL1:String = "../lib/bg_tutorial1.jpg";
 		public static const UP_PART_TUTORIAL1:String = "../lib/bg_tutorial1_up.png";

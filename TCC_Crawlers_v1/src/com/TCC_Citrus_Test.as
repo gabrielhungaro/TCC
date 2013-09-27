@@ -10,8 +10,11 @@ package com
 	import flash.display.Loader;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.geom.Rectangle;
 	import flash.system.ApplicationDomain;
 	import flash.system.Security;
 	
@@ -33,6 +36,8 @@ package com
 		
 		public function TCC_Citrus_Test()
 		{
+			stage.fullScreenSourceRect = new Rectangle(0,0,stage.stageWidth,stage.stageHeight);
+			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			//sound.addSound("Hurt", "../sounds/Hurt.mp3");
 			//sound.addSound("Kill", "../sounds/Kill.mp3");
 			

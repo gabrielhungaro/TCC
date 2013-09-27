@@ -3,12 +3,17 @@ package com.states
 	import com.greensock.TweenMax;
 	import com.hero.HeroActions;
 	
+	import flash.display.StageDisplayState;
+	import flash.display.StageScaleMode;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
 	
 	import citrus.input.controllers.Keyboard;
+	import citrus.sounds.CitrusSoundGroup;
+	import citrus.sounds.SoundManager;
 
 	public class OptionsState extends OptionScreenAsset
 	{
@@ -40,6 +45,16 @@ package com.states
 			this.btnSound.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.btnSound.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			this.btnSound.buttonMode = true;
+			
+			this.btnFullScreen.addEventListener(MouseEvent.CLICK, onClickFullScreen);
+			this.btnFullScreen.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.btnFullScreen.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.btnFullScreen.buttonMode = true;
+			
+			this.btnScaleMode.addEventListener(MouseEvent.CLICK, onClickScaleMode);
+			this.btnScaleMode.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.btnScaleMode.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			//this.btnScaleMode.buttonMode = true;
 			
 			fillArrayOfActionObjects();
 			
@@ -165,14 +180,39 @@ package com.states
 		
 		protected function onClickEffects(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
-			
+			SoundManager.getInstance().getGroup(CitrusSoundGroup.SFX).mute = !SoundManager.getInstance().getGroup(CitrusSoundGroup.SFX).mute;
 		}
 		
 		protected function onClickSound(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
-			
+			SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute = !SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute;
+		}
+		
+		protected function onClickFullScreen(event:MouseEvent):void
+		{
+			if(stage.displayState == StageDisplayState.NORMAL){
+				stage.displayState = StageDisplayState.FULL_SCREEN;
+				stage.fullScreenSourceRect = new Rectangle(0,0,stage.stageWidth,stage.stageHeight);
+				this.btnFullScreen.gotoAndStop(2);
+			}else{
+				this.btnFullScreen.gotoAndStop(1);
+				stage.displayState = StageDisplayState.NORMAL;
+				stage.fullScreenSourceRect = new Rectangle(0,0,stage.stageWidth,stage.stageHeight);
+			}
+		}
+		
+		protected function onClickScaleMode(event:MouseEvent):void
+		{
+			if(stage.scaleMode == StageScaleMode.EXACT_FIT){
+				stage.scaleMode = StageScaleMode.NO_BORDER;
+			}else if(stage.scaleMode == StageScaleMode.NO_BORDER){
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+			}else if(stage.scaleMode == StageScaleMode.NO_SCALE){
+				stage.scaleMode = StageScaleMode.SHOW_ALL;
+			}else if(stage.scaleMode == StageScaleMode.SHOW_ALL){
+				stage.scaleMode = StageScaleMode.EXACT_FIT;
+			}
+			event.currentTarget.text = stage.scaleMode;
 		}
 		
 		protected function onClickBack(event:MouseEvent):void

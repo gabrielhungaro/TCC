@@ -1,6 +1,7 @@
 package com.levels
 {
 	import com.Bat;
+	import com.ImageConstants;
 	import com.Spike;
 	import com.Spike2;
 	import com.data.SoundList;
@@ -94,22 +95,22 @@ package com.levels
 		
 		public function addBackground(imageURL:String = ""):void
 		{
-			bg = new CitrusSprite("background", {view: imageURL/*, width:10, height:stage.stageHeight*/});
+			bg = new CitrusSprite(ImageConstants.BACKGROUND_NAME, {view: imageURL});
 			bg.parallaxX = 1;
 			add(bg);
 		}
 		
 		public function addUpPart(imageURL:String = ""):void
 		{
-			upImage = new CitrusSprite("upImage", {view: imageURL/*, width:10, height:stage.stageHeight*/});
+			upImage = new CitrusSprite(ImageConstants.UP_PART_NAME, {view: imageURL});
 			upImage.parallaxX = 1.1;
 			add(upImage);
 		}
 		
 		private function loadSounds():void
 		{
-			SoundManager.getInstance().addSound("sound1", { sound:SoundList.TUTORIAL1_SOUND, loop:false, triggerSoundComplete:true,triggerRepeatComplete:true, timesToRepeat:12 , group:CitrusSoundGroup.BGM } );
-			SoundManager.getInstance().playSound("sound1");
+			SoundManager.getInstance().addSound(SoundList.TUTORIAL1_SOUND_NAME, { sound:SoundList.TUTORIAL1_SOUND, loop:false, triggerSoundComplete:true,triggerRepeatComplete:true, timesToRepeat:12 , group:CitrusSoundGroup.BGM } );
+			SoundManager.getInstance().playSound(SoundList.TUTORIAL1_SOUND_NAME);
 		}
 		
 		public function setUpCamera():void
