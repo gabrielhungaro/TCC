@@ -186,6 +186,7 @@ package com.states
 		protected function onClickSound(event:MouseEvent):void
 		{
 			SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute = !SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute;
+			this.btnSound.gotoAndStop(2);
 		}
 		
 		protected function onClickFullScreen(event:MouseEvent):void
