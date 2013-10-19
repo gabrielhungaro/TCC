@@ -1,13 +1,14 @@
 package com.states
 {
+	import com.data.SoundList;
 	import com.greensock.TweenMax;
 	
 	import flash.events.MouseEvent;
 	
-	import citrus.core.State;
 	import citrus.input.controllers.Keyboard;
+	import citrus.sounds.SoundManager;
 	
-	public class MainMenu extends State
+	public class MainMenu extends AState
 	{
 		private var backgrodround:MainMenuBackgroundAsset;
 		private var btnStart:BtnStartAsset;
@@ -19,6 +20,7 @@ package com.states
 		public function MainMenu()
 		{
 			super();
+			SoundManager.getInstance().playSound(SoundList.SOUND_MAIN_MENU_BACKGROUND_NAME);
 		}
 		
 		override public function initialize():void
@@ -55,13 +57,12 @@ package com.states
 		
 		protected function onClickStart(event:MouseEvent):void
 		{
-			_ce.levelManager.gotoLevel()
+			_ce.levelManager.gotoLevel(StateManager.STATE_TUTORIAL_PT1);
 		}
 		
 		protected function onClickCredits(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
-			
+			_ce.levelManager.gotoLevel(StateManager.STATE_CREDITS);
 		}
 		
 		protected function onClickOptions(event:MouseEvent):void
@@ -101,6 +102,7 @@ package com.states
 		
 		override public function destroy():void
 		{
+			SoundManager.getInstance().stopAllPlayingSounds();
 			super.destroy();
 		}
 	}

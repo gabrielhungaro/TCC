@@ -5,7 +5,7 @@ package com.levels
 	public interface ILevel
 	{
 		function initialize():void
-		function addBackground(imageURL:String = ""):void
+		function addBackground(imageName:String = "", imageURL:String = ""):void
 		function setUpCamera():void
 		function createHero():void
 		function update(timeDelta:Number):void
@@ -14,5 +14,6 @@ package com.levels
 		function getSeconds():int
 		function getMinutes():int
 		function getCamPos():Point
+		function updateInsanityBackground(insanityAlpha:Number):void
 	}
 }

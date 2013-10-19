@@ -4,35 +4,32 @@ package com.levels
 	import com.ImageConstants;
 	import com.Spike;
 	import com.Spike2;
-	import com.data.SoundList;
 	import com.hero.MyHero;
 	import com.objects.Flashlight;
 	import com.objects.NextLevel;
 	import com.objects.PrevLevel;
 	import com.objects.Stack;
 	import com.objects.Torch;
+	import com.states.AState;
 	
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.setTimeout;
 	
 	import Box2D.Common.Math.b2Vec2;
 	
 	import citrus.core.CitrusEngine;
-	import citrus.core.State;
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
-	import citrus.sounds.CitrusSoundGroup;
-	import citrus.sounds.SoundManager;
 	import citrus.utils.objectmakers.ObjectMaker2D;
 	import citrus.view.spriteview.SpriteView;
 	
-	import org.osflash.signals.Signal;
-	
-	public class Level extends State implements ILevel
+	public class Level extends AState implements ILevel
 	{
 		public var _levelSWF:MovieClip;
 		private var objectsArray:Array;
@@ -40,27 +37,28 @@ package com.levels
 		private var hero:MyHero;
 		public var box2D:Box2D;
 		
-		private var isPaused:Boolean;
+		private var isPaused:Boolean = true;;
 		private var ticks:int;
 		private var seconds:int;
 		private var minutes:int;
 		private var isInverted:Boolean;
 		private var yGravity:Number;
 		
-		public var lvlEnded:Signal;
-		public var restartLevel:Signal;
-		
 		private var viewRoot:SpriteView;
 		private var bg:CitrusSprite;
+		private var bgInsanity:CitrusSprite;
+		protected var displayBgInsanity:DisplayObject;
 		private var upImage:CitrusSprite;
+		
+		private var loadingScreen:Sprite;
+		private var loadingStatus:LoadingAsset;
 		
 		public function Level(levelSWF:MovieClip = null)
 		{
 			super();
 			this._levelSWF = levelSWF;
-			lvlEnded = new Signal();
-			restartLevel = new Signal();
-			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack, NextLevel, PrevLevel]
+			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack, NextLevel, PrevLevel];
+			addLoadingScreen();
 		}
 		
 		override public function initialize():void
@@ -71,7 +69,31 @@ package com.levels
 			viewRoot = this._realState.view as SpriteView;
 			
 			box2D = new Box2D("box2D");
-			box2D.visible = false;
+			box2D.visible = true;
+			add(box2D);
+			
+			addBackground();
+			
+			ObjectMaker2D.FromMovieClip(_levelSWF);
+			view.loadManager.onLoadComplete.addOnce(handleLoadComplete);
+			//setTimeout(loadLevel, 0);
+		}
+		
+		private function handleLoadComplete():void
+		{
+			// TODO Auto Generated method stub
+			trace("loading test");
+		}
+		
+		private function loadLevel():void
+		{
+			super.initialize();
+			_ce = CitrusEngine.getInstance();
+			
+			viewRoot = this._realState.view as SpriteView;
+			
+			box2D = new Box2D("box2D");
+			box2D.visible = true;
 			add(box2D);
 			
 			addBackground();
@@ -84,6 +106,8 @@ package com.levels
 			
 			addUpPart();
 			loadSounds();
+			isPaused = false;
+			removeLoadingScreen();
 		}
 		
 		private function _mouseWheel(event:MouseEvent):void {
@@ -93,25 +117,42 @@ package com.levels
 				view.camera.setZoom(view.camera.getZoom() - 0.1);
 		}
 		
-		public function addBackground(imageURL:String = ""):void
+		public function addBackground(imageName:String = "", imageURL:String = ""):void
 		{
-			bg = new CitrusSprite(ImageConstants.BACKGROUND_NAME, {view: imageURL});
+			bg = new CitrusSprite(imageName, {view: imageURL});
 			bg.parallaxX = 1;
 			add(bg);
 		}
 		
-		public function addUpPart(imageURL:String = ""):void
+		public function addBackgroundInsanity(imageName:String = "", imageURL:String = ""):void
 		{
-			upImage = new CitrusSprite(ImageConstants.UP_PART_NAME, {view: imageURL});
-			upImage.parallaxX = 1.1;
-			add(upImage);
+			bgInsanity = new CitrusSprite(imageName, {view: imageURL});
+			bgInsanity.parallaxX = 1;
+			add(bgInsanity);
+			
+			displayBgInsanity = view.getArt(bgInsanity) as DisplayObject;
+			displayBgInsanity.alpha = 0;
+			//TestDo.alpha = 0;
+			//eaze((TestDo).to(1, {alpha:1}).to(0, {alpha:1});
 		}
 		
-		private function loadSounds():void
+		public function addUpPart(imageURL:String = "", imageParallaxX:Number = 1, imageParallaxY:Number = 1):void
 		{
-			SoundManager.getInstance().addSound(SoundList.TUTORIAL1_SOUND_NAME, { sound:SoundList.TUTORIAL1_SOUND, loop:false, triggerSoundComplete:true,triggerRepeatComplete:true, timesToRepeat:12 , group:CitrusSoundGroup.BGM } );
-			SoundManager.getInstance().playSound(SoundList.TUTORIAL1_SOUND_NAME);
+			upImage = new CitrusSprite(ImageConstants.UP_PART_NAME, {view: imageURL});
+			upImage.parallaxX = imageParallaxX;
+			upImage.parallaxY = imageParallaxY;
+			add(upImage);
+			
+			//var TestDo:DisplayObject = view.getArt(upImage) as DisplayObject;
+			//TestDo.filters
+			//eaze((TestDo).to(1, {alpha:1}).to(0, {alpha:1});
 		}
+		
+		/*override protected function loadSounds():void
+		{
+			super.loadSounds();
+			SoundManager.getInstance().playSound(SoundList.SOUND_TUTORIAL1_BACKGROUND_NAME);
+		}*/
 		
 		public function setUpCamera():void
 		{
@@ -183,12 +224,20 @@ package com.levels
 			}*/
 			view.camera.rotate(Math.PI);
 			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new Point(.25, .05));
+			//setUpCamera();
 			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			//trace("Invertendo tudo" + box2D.world.GetGravity().y);
 			yGravity = box2D.world.GetGravity().y * (-1);
 			box2D.world.SetGravity(new b2Vec2(0, yGravity));
 			//_ce.rotation += 5;
 			//hero.setInverted(isInverted);
+		}
+		
+		public function updateInsanityBackground(insanityAlpha:Number):void
+		{
+			if(displayBgInsanity){
+				displayBgInsanity.alpha = insanityAlpha;
+			}
 		}
 		
 		override public function destroy():void

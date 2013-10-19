@@ -4,6 +4,7 @@ package com
 	{
 		public static const HERO_NAME:String = "heroImage";
 		public static const BACKGROUND_NAME:String = "backgroundImage";
+		public static const BACKGROUND_INSANITY_NAME:String = "backgroundImage";
 		public static const UP_PART_NAME:String = "upImage";
 		public static const BACKGROUND_TUTORIAL2_NAME:String = "tutorialImage2";
 		public static const BACKGROUND_TUTORIAL3_NAME:String = "tutorialImage3";
@@ -14,11 +15,15 @@ package com
 		public static const DOOR_NAME:String = "doorImage";
 		public static const SPIKE_NAME:String = "spikeImage";
 		
-		public static const HERO:String = "../lib/hero_resize.png";
+		public static const HERO:String = "../lib/hero.swf";
 		public static const BACKGROUND_TUTORIAL1:String = "../lib/bg_tutorial1.jpg";
+		public static const BACKGROUND_TUTORIAL1_INSANITY:String = "../lib/bg_tutorial1_Insanity.jpg";
 		public static const UP_PART_TUTORIAL1:String = "../lib/bg_tutorial1_up.png";
 		public static const BACKGROUND_TUTORIAL2:String = "../lib/bg_tutorial2.jpg";
+		public static const UP_PART_TUTORIAL2_SCAFFOLDING:String = "../lib/bg_tutorial2_up2.png";
+		public static const UP_PART_TUTORIAL2:String = "../lib/bg_tutorial2_up.png";
 		public static const BACKGROUND_TUTORIAL3:String = "../lib/bg_tutorial3.jpg";
+		public static const UP_PART_TUTORIAL3:String = "../lib/bg_tutorial3_up.png";
 		public static const BACKGROUND_TUTORIAL4:String = "../lib/bg_tutorial4.jpg";
 		public static const FLASHLIGHT:String = "../lib/flashlight_resize.png";
 		public static const TORCH:String = "../lib/torch_resize.png";

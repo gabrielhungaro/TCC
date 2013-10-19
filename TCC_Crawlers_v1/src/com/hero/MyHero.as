@@ -4,6 +4,7 @@ package com.hero
 	import com.Fog;
 	import com.ImageConstants;
 	import com.data.ASharedObject;
+	import com.data.SoundList;
 	import com.levels.ILevel;
 	import com.objects.Rock;
 	
@@ -24,6 +25,7 @@ package com.hero
 	import citrus.objects.platformer.box2d.Sensor;
 	import citrus.physics.box2d.Box2DUtils;
 	import citrus.physics.box2d.IBox2DPhysicsObject;
+	import citrus.sounds.SoundManager;
 	import citrus.view.ACitrusCamera;
 	import citrus.view.spriteview.SpriteArt;
 	
@@ -72,32 +74,19 @@ package com.hero
 		
 		private var backpack:Backpack;
 		
-		public static var okToCreate:Boolean = true;
-		public static var instace:MyHero;
-		public static var HeroName:String
-		public static var HeroParams:Object;
 		private var keyboard:Keyboard;
+		
+		//Attributes
+		private var _jumpHeight:Number = 20;
+		private var _maxVelocity:Number = 8;
+		private var _acceleration:Number = 1;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
-			HeroName = name;
-			HeroParams = params;
-			if(okToCreate){
-				super(name, params);
-				this.view = ImageConstants.HERO;
-			}else{
-				
-			}
-		}
-		
-		public static function getInstace():MyHero
-		{
-			if(instace == null){
-				okToCreate = true;
-				instace = new MyHero(HeroName, HeroParams);
-				okToCreate = false
-			}
-			return instace;
+			var heroAsset:HeroAsset = new HeroAsset();
+			super(name, params);
+			this.view = heroAsset;
+			this.width = heroAsset.width;
 		}
 		
 		public function init():void
@@ -114,8 +103,16 @@ package com.hero
 			
 			shadowPos = new Point(this.x, this.y + this.height);
 			
+			setupHeroAttributes();
 			setupHeroAction();
 			createShadow();
+		}
+		
+		private function setupHeroAttributes():void
+		{
+			this.jumpHeight = _jumpHeight;
+			this.maxVelocity = _maxVelocity;
+			this.acceleration = _acceleration;
 		}
 		
 		private function createFog():void
@@ -382,11 +379,20 @@ package com.hero
 					//insert other "flying" code here
 				}
 				
+				if (_ce.input.justDid(HeroActions.RIGHT, inputChannel) && !_ducking)
+					SoundManager.getInstance().playSound(SoundList.SFX_NORMAL_WALK_NAME);
+					
 				if (_ce.input.isDoing(HeroActions.RIGHT, inputChannel) && !_ducking)
 				{
 					velocity.Add(getSlopeBasedMoveAngle());
 					moveKeyPressed = true;
 				}
+				
+				if (_ce.input.justDid(HeroActions.RIGHT, inputChannel) && !_ducking)
+					SoundManager.getInstance().playSound(SoundList.SFX_NORMAL_WALK_NAME);
+				
+				//if (_ce.input.hasDone(HeroActions.RIGHT, inputChannel) || _ce.input.hasDone(HeroActions.LEFT, inputChannel))
+					//SoundManager.getInstance().stopSound(SoundList.SFX_NORMAL_WALK_NAME);
 				
 				if (_ce.input.isDoing(HeroActions.LEFT, inputChannel) && !_ducking)
 				{
@@ -409,6 +415,7 @@ package com.hero
 				
 				if (_onGround && _ce.input.justDid(HeroActions.JUMP, inputChannel) && !_ducking)
 				{
+					SoundManager.getInstance().playSound(SoundList.SFX_NORMAL_JUMP_NAME);
 					if(isInverted){
 						velocity.y = jumpHeight;
 					}else{
@@ -447,15 +454,17 @@ package com.hero
 		
 		private function openBackPack():void
 		{
-			var arrayTeste:Array = ["1", "2", "3", "4", "5", "6", "7", "8", "4", "5", "6", "7", "8", "4", "5", "6", "7", "8"]
-			backpack = new Backpack();
-			_ce.addChild(backpack);
-			backpack.x = backpack.width/2;
-			backpack.y = backpack.height/2;
-			backpack.setArrayOfItens(arrayTeste);
-			backpack.setKeyboard(keyboard);
-			backpack.setCloseFunction(closeBackpack);
-			backpack.init();
+			if(!backpack){
+				var arrayTeste:Array = ["1", "2", "3", "4", "5", "6", "7", "8", "4", "5", "6", "7", "8", "4", "5", "6", "7", "8"]
+				backpack = new Backpack();
+				_ce.addChild(backpack);
+				backpack.x = backpack.width/2;
+				backpack.y = backpack.height/2;
+				backpack.setArrayOfItens(arrayTeste);
+				backpack.setKeyboard(keyboard);
+				backpack.setCloseFunction(closeBackpack);
+				backpack.init();
+			}
 		}
 		
 		private function closeBackpack():void
@@ -464,6 +473,7 @@ package com.hero
 			if(backpack){
 				if(_ce.contains(backpack)){
 					_ce.removeChild(backpack);
+					backpack = null;
 				}
 			}
 		}
@@ -528,6 +538,8 @@ package com.hero
 					isInsane = false;
 				}
 			}
+			//trace(insanity/100);
+			iLevel.updateInsanityBackground(insanity/100);
 		}
 		
 		public function getViewAsMovieClip():MovieClip
@@ -556,7 +568,9 @@ package com.hero
 				if(this.rotation == 0){
 					this.rotation = 180;
 					isInverted = true;
+					SoundManager.getInstance().playSound(SoundList.SFX_INVERT_WORLD_NAME);
 				}else{
+					SoundManager.getInstance().playSound(SoundList.SFX_REVERT_WORLD_NAME);
 					this.rotation = 0;
 					isInverted = false;
 				}
@@ -566,6 +580,7 @@ package com.hero
 		
 		public function useCamera():void
 		{
+			SoundManager.getInstance().playSound(SoundList.SFX_HIGH_FLASHLIGHT_NAME);
 			addInsanity(10);
 			insanity += 10;
 			cameraUsed = true;
@@ -582,7 +597,9 @@ package com.hero
 			if(this.isWithFlashlight && this.flashlightEnergy > this.minFlashlightEnergy){
 				usingFlashlight = true;
 				fog.useFlashlight();
+				SoundManager.getInstance().playSound(SoundList.SFX_TURN_ON_FLASHLIGHT_NAME);
 			}else if(this.isWithFlashlight && this.usingFlashlight){
+				SoundManager.getInstance().playSound(SoundList.SFX_TURN_OFF_FLASHLIGHT_NAME);
 				usingFlashlight = false;
 				fog.useFlashlight();
 			}

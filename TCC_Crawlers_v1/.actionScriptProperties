@@ -35,6 +35,7 @@
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="1" path="lib"/>
       <libraryPathEntry kind="1" linkType="1" path="C:/GitHub/Citrus-Engine/lib"/>
+      <libraryPathEntry kind="1" linkType="1" path="levels"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -46,3 +47,4 @@
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>
+

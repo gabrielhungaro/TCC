@@ -1,5 +1,6 @@
 package com
 {
+	import com.data.SoundList;
 	import com.greensock.TweenMax;
 	import com.greensock.plugins.BezierPlugin;
 	import com.greensock.plugins.BezierThroughPlugin;
@@ -9,6 +10,7 @@ package com
 	import Box2D.Dynamics.Contacts.b2Contact;
 	
 	import citrus.objects.platformer.box2d.Sensor;
+	import citrus.sounds.SoundManager;
 	
 	TweenPlugin.activate([BezierPlugin, BezierThroughPlugin]);
 
@@ -51,13 +53,16 @@ package com
 		{
 			super.update(timeDelta);
 			//if(target){
+			if(_ce.state.getObjectsByType(MyHero).length > 0){
 				calcDistance(_ce.state.getObjectsByType(MyHero)[0], this);
 				if(distance <= minimumDistance && !tweening){
 					tweening = true;
 					doBatTween();
 					//TweenLite.to(this, 3, {bezier:[{x:191, y:this.y}, {x:308, y:this.y}]});
 					trace("VOU VOAAAAAAAAAAAAAAAAAAAAAAAAAAAAR!");
+					SoundManager.getInstance().playSound(SoundList.SFX_BAT_NAME);
 				}
+			}
 			//}
 		}
 		
@@ -90,6 +95,13 @@ package com
 		public function setTarget(value:Object):void
 		{
 			target = value;
+		}
+		
+		override public function destroy():void
+		{
+			TweenMax.killTweensOf(this);
+			target = null;
+			super.destroy();
 		}
 	}
 }
