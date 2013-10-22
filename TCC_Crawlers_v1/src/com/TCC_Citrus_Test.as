@@ -55,7 +55,7 @@ package com
 			levelManager = new LevelManager(AState);
 			levelManager.applicationDomain = ApplicationDomain.currentDomain; 
 			levelManager.onLevelChanged.add(_onLevelChanged);
-			levelManager.levels = [MainMenu, Credits, [TutorialPart4State, Tutorial_part4Mc], [TutorialPart1State, Tutorial_part1Mc], [TutorialPart2State, Tutorial_part2Mc], [TutorialPart3State, Tutorial_part3Mc], [Level1Part1, Level1_Part1Mc], [Level1Part2, Level1_Part2Mc], [Level1Part3, Level1_Part3Mc]];
+			levelManager.levels = [MainMenu, Credits, [TutorialPart1State, Tutorial_part1Mc], [TutorialPart2State, Tutorial_part2Mc], [TutorialPart3State, Tutorial_part3Mc], [TutorialPart4State, Tutorial_part4Mc], [Level1Part1, Level1_Part1Mc], [Level1Part2, Level1_Part2Mc], [Level1Part3, Level1_Part3Mc]];
 			levelManager.gotoLevel();
 			
 			//this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);

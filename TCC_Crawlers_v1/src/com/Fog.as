@@ -35,7 +35,7 @@ package com
 		private var FLASHLIGHT_LIGHT:String = "flashlight";
 		private var usingFlashlight:Boolean;
 		
-		public function Fog(target:Object, cam:ACitrusCamera, _x:int, _y:int, _width:int, _height:int)
+		public function Fog(target:Object, cam:ACitrusCamera, _x:int, _y:int, _width:Number, _height:Number)
 		{
 			_target = target;
 			_cam = cam;
@@ -76,13 +76,15 @@ package com
 			//updateLightType();
 			updateLightSize();
 			//trace(_cam.transformMatrix.transformPoint(new Point(0,0)));
-			if(isInverted){
+			_heroLight.x = _target.x;
+			_heroLight.y = _target.y;
+			/*if(isInverted){
 				_heroLight.x = _cam.transformMatrix.transformPoint(new Point(0,0)).x/2 - _target.x;
 				_heroLight.y = _cam.transformMatrix.transformPoint(new Point(0,0)).y/2 - _target.y;
 			}else{
 				_heroLight.x = _target.x + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
 				_heroLight.y = _target.y + _cam.transformMatrix.transformPoint(new Point(0,0)).y;		
-			}
+			}*/
 			
 			//trace(_heroLight.x, _heroLight.y);
 			if(isWithCamera){

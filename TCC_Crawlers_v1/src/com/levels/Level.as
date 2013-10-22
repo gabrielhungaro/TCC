@@ -58,6 +58,8 @@ package com.levels
 		
 		private var loadingScreen:Sprite;
 		private var loadingStatus:LoadingAsset;
+		private var widthBound:Number;
+		private var heightBound:Number;
 		
 		public function Level(levelSWF:MovieClip = null)
 		{
@@ -95,6 +97,8 @@ package com.levels
 			super.initialize();
 			
 			viewRoot = this._realState.view as SpriteView;
+			widthBound = _levelSWF.width;
+			heightBound = _levelSWF.height;
 			
 			box2D = new Box2D("box2D");
 			box2D.visible = true;
@@ -171,9 +175,6 @@ package com.levels
 		
 		public function setUpCamera():void
 		{
-			
-			var widthBound:int = _levelSWF.width;
-			var heightBound:int = _levelSWF.height;
 			if(widthBound <= stage.stageWidth){
 				widthBound = stage.stageWidth;
 			}
@@ -201,6 +202,8 @@ package com.levels
 			hero.setState(this);
 			hero.setCam(view.camera);
 			hero.setViewRoot(viewRoot.viewRoot);
+			hero.setLevelWidth(widthBound);
+			hero.setLevelHeight(heightBound);
 			//hero.setCamPos(view.camera.camPos);
 			hero.setWorld(this.box2D.world);
 			hero.setWorldScale(this.box2D.scale);
@@ -236,8 +239,6 @@ package com.levels
 				hero.rotation = 0;
 				isInverted = false;
 			}*/
-			var widthBound:int = _levelSWF.width;
-			var heightBound:int = _levelSWF.height;
 			view.camera.rotate(Math.PI);
 			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, widthBound, heightBound), new Point(.25, .20));
 			//setUpCamera();

@@ -77,6 +77,8 @@ package com.hero
 		private var _jumpHeight:Number = 20;
 		private var _maxVelocity:Number = 8;
 		private var _acceleration:Number = 1;
+		private var widthBound:Number;
+		private var heightBound:Number;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -115,18 +117,18 @@ package com.hero
 		private function createFog():void
 		{
 			if(!fog){
-				fog = new Fog(this, _cam, 0, 0, _ce.stage.stageWidth, _ce.stage.stageHeight);
+				fog = new Fog(this, _cam, 0, 0, widthBound, heightBound);
 				fog.setFrameRate(FRAME_RATE);
 				fog.init();
-				_ce.addChild(fog);
+				_viewRoot.addChild(fog);
 			}
 		}
 		
 		private function removeFog():void
 		{
 			if(fog){
-				if(_ce.contains(fog)){
-					_ce.removeChild(fog);
+				if(_viewRoot.contains(fog)){
+					_viewRoot.removeChild(fog);
 					fog.destroy();
 					fog = null;
 				}
@@ -749,6 +751,16 @@ package com.hero
 		public function getViewRoot():Sprite
 		{
 			return _viewRoot;
+		}
+		
+		public function setLevelWidth(value:Number):void
+		{
+			widthBound = value;
+		}
+		
+		public function setLevelHeight(value:Number):void
+		{
+			heightBound = value;
 		}
 	}
 }

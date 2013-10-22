@@ -36,12 +36,13 @@ package com.states
 			//addChild(loader);
 			
 			loadingScreen = new LoadingScreenAsset();
+			loadingScreen.loadingBar.play();
 			this.addChild(loadingScreen);
 		}
 		
 		protected function progressHandler(event:ProgressEvent):void
 		{
-			trace("bnuibilbib" + event.bytesLoaded);
+			trace("[ AState ] - progressHandler " + event.bytesLoaded);
 		}
 		
 		protected function onCompleteLoadImage(event:Event):void
