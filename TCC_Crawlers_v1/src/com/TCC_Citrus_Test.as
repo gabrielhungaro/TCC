@@ -1,10 +1,16 @@
 package com
 {
-	import com.levels.Level;
-	import com.levels.Level1State;
+	import com.data.ASharedObject;
+	import com.levels.Level1Part1;
+	import com.levels.Level1Part2;
+	import com.levels.Level1Part3;
 	import com.levels.Level2State;
 	import com.levels.Level3State;
 	import com.levels.Level4State;
+	import com.levels.TutorialPart1State;
+	import com.levels.TutorialPart2State;
+	import com.levels.TutorialPart3State;
+	import com.levels.TutorialPart4State;
 	import com.states.AState;
 	import com.states.Credits;
 	import com.states.MainMenu;
@@ -17,6 +23,7 @@ package com
 	
 	import citrus.core.CitrusEngine;
 	import citrus.core.IState;
+	import citrus.input.controllers.Keyboard;
 	import citrus.utils.LevelManager;
 	
 	[SWF(width="1024",height="768")]
@@ -24,13 +31,15 @@ package com
 	{
 		Security.allowDomain("*");
 		private var mainMenu:MainMenu;
-		private var level1State:Level1State;
 		private var debugSprite:Sprite = new Sprite();
 		
 		private var levels:Array = [];
 		
 		public function TCC_Citrus_Test()
 		{
+			ASharedObject.getInstance();
+			ASharedObject.getInstance().setKeyboard(this.input.keyboard as Keyboard);
+			ASharedObject.getInstance().setCitrusEngineRef(this);
 			stage.fullScreenSourceRect = new Rectangle(0,0,stage.stageWidth,stage.stageHeight);
 			stage.scaleMode = StageScaleMode.EXACT_FIT;
 			//sound.addSound("Hurt", "../sounds/Hurt.mp3");
@@ -46,7 +55,7 @@ package com
 			levelManager = new LevelManager(AState);
 			levelManager.applicationDomain = ApplicationDomain.currentDomain; 
 			levelManager.onLevelChanged.add(_onLevelChanged);
-			levelManager.levels = [MainMenu, Credits, [Level1State, Level1Mc], [Level2State, Level2Mc], [Level3State, Level3Mc], [Level4State, Level4Mc]];
+			levelManager.levels = [MainMenu, Credits, [TutorialPart4State, Tutorial_part4Mc], [TutorialPart1State, Tutorial_part1Mc], [TutorialPart2State, Tutorial_part2Mc], [TutorialPart3State, Tutorial_part3Mc], [Level1Part1, Level1_Part1Mc], [Level1Part2, Level1_Part2Mc], [Level1Part3, Level1_Part3Mc]];
 			levelManager.gotoLevel();
 			
 			//this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);

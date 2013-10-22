@@ -1,12 +1,12 @@
 package com
 {
+	import com.data.ASharedObject;
 	import com.greensock.TweenMax;
+	import com.states.NotebookState;
 	import com.states.OptionsState;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	
-	import citrus.input.controllers.Keyboard;
 	
 
 	public class Backpack extends MenuInGameAsset
@@ -19,7 +19,7 @@ package com
 		private var scroll:Scroll;
 		private var closeFunction:Function;
 		private var optionScreen:OptionsState;
-		private var keyboard:Keyboard;
+		private var notebook:NotebookState;
 		
 		public function Backpack()
 		{
@@ -31,6 +31,10 @@ package com
 			this.btnBack.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.btnBack.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			this.btnBack.buttonMode = true;
+			this.btnNotebook.addEventListener(MouseEvent.CLICK, onClickNotebook);
+			this.btnNotebook.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.btnNotebook.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.btnNotebook.buttonMode = true;
 		}
 		
 		public function init():void
@@ -73,11 +77,28 @@ package com
 			scroll.x = this.itensContainer.x + this.itensContainer.width + offsetX;
 		}
 		
+		protected function onClickNotebook(event:MouseEvent):void
+		{
+			notebook = new NotebookState();
+			notebook.setCloseFunction(closeNotebook);
+			this.addChild(notebook);
+		}
+		
+		private function closeNotebook():void
+		{
+			notebook.destroy();
+			if(notebook){
+				if(this.contains(notebook)){
+					this.removeChild(notebook);
+				}
+			}
+		}
+		
 		protected function onClickOptionsButton(event:MouseEvent):void
 		{
 			optionScreen = new OptionsState();
 			optionScreen.setCloseFunction(closeOptions);
-			optionScreen.setKeyboard(keyboard);
+			optionScreen.setKeyboard(ASharedObject.getInstance().getKeyboard());
 			this.addChild(optionScreen);
 		}
 		
@@ -111,11 +132,6 @@ package com
 			arrayOfItens = value;
 		}
 		
-		public function setKeyboard(value:Keyboard):void
-		{
-			keyboard = value;
-		}
-		
 		public function setCloseFunction(value:Function):void
 		{
 			closeFunction = value;
@@ -133,6 +149,18 @@ package com
 			if(scroll){
 				if(this.contains(scroll)){
 					this.removeChild(scroll);
+				}
+			}
+			if(optionScreen){
+				if(this.contains(optionScreen)){
+					this.removeChild(optionScreen);
+					optionScreen = null;
+				}
+			}
+			if(notebook){
+				if(this.contains(notebook)){
+					this.removeChild(notebook);
+					notebook = null;
 				}
 			}
 			

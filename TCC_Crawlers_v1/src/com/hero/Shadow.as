@@ -31,10 +31,14 @@ package com.hero
 			//this.addChild(asset);
 		}*/
 		
-		public function update():void
+		
+		public function update(insanity:int, insanityLimit:int):void
 		{
-			this.x = hero.x - hero.width/2 - hero.getCamPos().x;
-			this.y = hero.y - hero.height/2 - hero.getCamPos().y;
+			/*this.x = hero.x - hero.width/2 - hero.getCamPos().x;
+			this.y = hero.y - hero.height/2 - hero.getCamPos().y;*/
+			var currentFrame:int = (this.asset.totalFrames * insanity) / insanityLimit;
+			trace("[ SHADOW ] - CURRENTFRAME: " + currentFrame);
+			this.asset.gotoAndStop(currentFrame);
 		}
 		
 		public function setHero(value:MyHero):void

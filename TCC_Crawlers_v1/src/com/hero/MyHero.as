@@ -2,7 +2,6 @@ package com.hero
 {
 	import com.Backpack;
 	import com.Fog;
-	import com.ImageConstants;
 	import com.data.ASharedObject;
 	import com.data.SoundList;
 	import com.levels.ILevel;
@@ -73,8 +72,6 @@ package com.hero
 		private var shadowPos:Point;
 		
 		private var backpack:Backpack;
-		
-		private var keyboard:Keyboard;
 		
 		//Attributes
 		private var _jumpHeight:Number = 20;
@@ -164,14 +161,15 @@ package com.hero
 		
 		private function setupHeroAction():void
 		{
-			keyboard = _ce.input.keyboard as Keyboard;
-			keyboard.addKeyAction("fly", Keyboard.F, inputChannel);
-			keyboard.addKeyAction(HeroActions.LEFT, HeroActions.LEFT_KEY, inputChannel);
-			keyboard.addKeyAction(HeroActions.RIGHT, HeroActions.RIGHT_KEY, inputChannel);
-			keyboard.addKeyAction(HeroActions.INVERT, HeroActions.INVERT_KEY, inputChannel);
-			keyboard.addKeyAction(HeroActions.HIGH_FLASHLIGHT, HeroActions.HIGH_FLASHLIGHT_KEY, inputChannel);
-			keyboard.addKeyAction(HeroActions.FLASHLIGHT, HeroActions.FLASHLIGHT_KEY, inputChannel);
-			keyboard.addKeyAction(HeroActions.BACKPACK, HeroActions.BACKPACK_KEY, inputChannel);
+			ASharedObject.getInstance().setKeyboard(_ce.input.keyboard as Keyboard);
+			ASharedObject.getInstance().getKeyboard().addKeyAction("fly", Keyboard.F, inputChannel);
+			ASharedObject.getInstance().getKeyboard().addKeyAction(HeroActions.LEFT, HeroActions.LEFT_KEY, inputChannel);
+			ASharedObject.getInstance().getKeyboard().addKeyAction(HeroActions.RIGHT, HeroActions.RIGHT_KEY, inputChannel);
+			ASharedObject.getInstance().getKeyboard().addKeyAction(HeroActions.INVERT, HeroActions.INVERT_KEY, inputChannel);
+			ASharedObject.getInstance().getKeyboard().addKeyAction(HeroActions.HIGH_FLASHLIGHT, HeroActions.HIGH_FLASHLIGHT_KEY, inputChannel);
+			ASharedObject.getInstance().getKeyboard().addKeyAction(HeroActions.FLASHLIGHT, HeroActions.FLASHLIGHT_KEY, inputChannel);
+			ASharedObject.getInstance().getKeyboard().addKeyAction(HeroActions.BACKPACK, HeroActions.BACKPACK_KEY, inputChannel);
+			ASharedObject.getInstance().getKeyboard().addKeyAction(HeroActions.CLIMB, HeroActions.CLIMB_KEY, inputChannel);
 		}
 		
 		private function drawInsanityBar():void
@@ -461,7 +459,6 @@ package com.hero
 				backpack.x = backpack.width/2;
 				backpack.y = backpack.height/2;
 				backpack.setArrayOfItens(arrayTeste);
-				backpack.setKeyboard(keyboard);
 				backpack.setCloseFunction(closeBackpack);
 				backpack.init();
 			}
@@ -519,7 +516,8 @@ package com.hero
 				}
 				insanityBar.scaleX = insanity / insanityLimit;
 				//trace(shadow.scaleX);
-				shadow.scaleX = shadow.scaleY = (insanity / insanityLimit) + 1;
+				//shadow.scaleX = shadow.scaleY = (insanity / insanityLimit) + 1;
+				shadow.update(insanity, insanityLimit);
 			}
 			if(insanity >= insanityDangerous && insanity <= insanityLimit){
 				isInsane = true;

@@ -1,21 +1,19 @@
 package com.states
 {
+	import com.data.ASharedObject;
 	import com.data.SoundList;
-	import com.greensock.TweenMax;
 	
 	import flash.events.MouseEvent;
 	
-	import citrus.input.controllers.Keyboard;
 	import citrus.sounds.SoundManager;
 	
 	public class MainMenu extends AState
 	{
-		private var backgrodround:MainMenuBackgroundAsset;
+		private var mainMenuAsset:MainMenuAsset;
 		private var btnStart:BtnStartAsset;
 		private var btnOptions:BtnOptionsAsset;
 		private var btnCredits:BtnCreditsAsset;
 		private var optionScreen:OptionsState;
-		private var keyboard:Keyboard;
 		
 		public function MainMenu()
 		{
@@ -26,43 +24,33 @@ package com.states
 		override public function initialize():void
 		{
 			super.initialize();
-			keyboard = _ce.input.keyboard as Keyboard;
-			backgrodround = new MainMenuBackgroundAsset();
-			this.addChild(backgrodround);
-			btnStart = new BtnStartAsset();
-			btnStart.x = 150;
-			btnStart.y = 150;
-			btnStart.addEventListener(MouseEvent.CLICK, onClickStart);
-			btnStart.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			btnStart.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			btnStart.buttonMode = true;
-			this.addChild(btnStart)
-			btnOptions = new BtnOptionsAsset();
-			btnOptions.x = 150;
-			btnOptions.y = 300;
-			btnOptions.addEventListener(MouseEvent.CLICK, onClickOptions);
-			btnOptions.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			btnOptions.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			btnOptions.buttonMode = true;
-			this.addChild(btnOptions)
-			btnCredits = new BtnCreditsAsset();
-			btnCredits.x = 150;
-			btnCredits.y = 450;
-			btnCredits.addEventListener(MouseEvent.CLICK, onClickCredits);
-			btnCredits.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			btnCredits.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			btnCredits.buttonMode = true;
-			this.addChild(btnCredits)
+			mainMenuAsset = new MainMenuAsset();
+			this.addChild(mainMenuAsset);
+			
+			mainMenuAsset.btnPlay.addEventListener(MouseEvent.CLICK, onClickPlay);
+			mainMenuAsset.btnPlay.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			mainMenuAsset.btnPlay.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			mainMenuAsset.btnPlay.buttonMode = true;
+			
+			mainMenuAsset.btnOptions.addEventListener(MouseEvent.CLICK, onClickOptions);
+			mainMenuAsset.btnOptions.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			mainMenuAsset.btnOptions.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			mainMenuAsset.btnOptions.buttonMode = true;
+			
+			mainMenuAsset.btnExit.addEventListener(MouseEvent.CLICK, onClickExit);
+			mainMenuAsset.btnExit.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			mainMenuAsset.btnExit.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			mainMenuAsset.btnExit.buttonMode = true;
 		}
 		
-		protected function onClickStart(event:MouseEvent):void
+		protected function onClickPlay(event:MouseEvent):void
 		{
 			_ce.levelManager.gotoLevel(StateManager.STATE_TUTORIAL_PT1);
 		}
 		
-		protected function onClickCredits(event:MouseEvent):void
+		protected function onClickExit(event:MouseEvent):void
 		{
-			_ce.levelManager.gotoLevel(StateManager.STATE_CREDITS);
+			//_ce.levelManager.gotoLevel(StateManager.STATE_CREDITS);
 		}
 		
 		protected function onClickOptions(event:MouseEvent):void
@@ -71,7 +59,7 @@ package com.states
 			optionScreen.setCloseFunction(closeOptions);
 			optionScreen.x = optionScreen.width/2;
 			optionScreen.y = optionScreen.height/2;
-			optionScreen.setKeyboard(keyboard);
+			optionScreen.setKeyboard(ASharedObject.getInstance().getKeyboard());
 			this.addChild(optionScreen);
 		}
 		
@@ -87,12 +75,14 @@ package com.states
 		
 		protected function onMouseOver(event:MouseEvent):void
 		{
-			TweenMax.to(event.currentTarget, 0.1, { colorTransform: { tint:0xffffff, exposure:1.3 }} );
+			//TweenMax.to(event.currentTarget, 0.1, { colorTransform: { tint:0xffffff, exposure:1.3 }} );
+			event.currentTarget.gotoAndStop("over");
 		}
 		
 		protected function onMouseOut(event:MouseEvent):void
 		{
-			TweenMax.to(event.currentTarget, 0.1, { colorTransform: { tint:0xffffff, exposure:1 }} );
+			//TweenMax.to(event.currentTarget, 0.1, { colorTransform: { tint:0xffffff, exposure:1 }} );
+			event.currentTarget.gotoAndStop("out");
 		}
 		
 		override public function update(timeDelta:Number):void
@@ -102,6 +92,12 @@ package com.states
 		
 		override public function destroy():void
 		{
+			if(mainMenuAsset){
+				if(this.contains(mainMenuAsset)){
+					this.removeChild(mainMenuAsset);
+					mainMenuAsset = null;
+				}
+			}
 			SoundManager.getInstance().stopAllPlayingSounds();
 			super.destroy();
 		}

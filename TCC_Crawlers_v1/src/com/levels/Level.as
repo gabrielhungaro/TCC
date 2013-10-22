@@ -1,12 +1,16 @@
 package com.levels
 {
 	import com.Bat;
+	import com.Hole;
 	import com.ImageConstants;
 	import com.Spike;
 	import com.Spike2;
+	import com.data.ASharedObject;
 	import com.hero.MyHero;
 	import com.objects.Flashlight;
+	import com.objects.Lader;
 	import com.objects.NextLevel;
+	import com.objects.Page;
 	import com.objects.PrevLevel;
 	import com.objects.Stack;
 	import com.objects.Torch;
@@ -22,7 +26,6 @@ package com.levels
 	
 	import Box2D.Common.Math.b2Vec2;
 	
-	import citrus.core.CitrusEngine;
 	import citrus.objects.CitrusSprite;
 	import citrus.objects.platformer.box2d.Platform;
 	import citrus.physics.box2d.Box2D;
@@ -49,6 +52,9 @@ package com.levels
 		private var bgInsanity:CitrusSprite;
 		protected var displayBgInsanity:DisplayObject;
 		private var upImage:CitrusSprite;
+		private var upImageInsanity:CitrusSprite;
+		protected var displayUpImageInsanity:DisplayObject;
+		private var arrayOfInanitysParties:Array;
 		
 		private var loadingScreen:Sprite;
 		private var loadingStatus:LoadingAsset;
@@ -57,16 +63,15 @@ package com.levels
 		{
 			super();
 			this._levelSWF = levelSWF;
-			objectsArray = [Platform, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack, NextLevel, PrevLevel];
-			addLoadingScreen();
+			objectsArray = [Platform, Hole, Page, Lader, Spike, Spike2, MyHero, Torch, Bat, Flashlight, Stack, NextLevel, PrevLevel];
+			//addLoadingScreen();
 		}
 		
 		override public function initialize():void
 		{
 			super.initialize();
-			_ce = CitrusEngine.getInstance();
 			
-			viewRoot = this._realState.view as SpriteView;
+			/*viewRoot = this._realState.view as SpriteView;
 			
 			box2D = new Box2D("box2D");
 			box2D.visible = true;
@@ -74,9 +79,9 @@ package com.levels
 			
 			addBackground();
 			
-			ObjectMaker2D.FromMovieClip(_levelSWF);
-			view.loadManager.onLoadComplete.addOnce(handleLoadComplete);
-			//setTimeout(loadLevel, 0);
+			ObjectMaker2D.FromMovieClip(_levelSWF);*/
+			//view.loadManager.onLoadComplete.addOnce(handleLoadComplete);
+			setTimeout(loadLevel, 0);
 		}
 		
 		private function handleLoadComplete():void
@@ -88,7 +93,6 @@ package com.levels
 		private function loadLevel():void
 		{
 			super.initialize();
-			_ce = CitrusEngine.getInstance();
 			
 			viewRoot = this._realState.view as SpriteView;
 			
@@ -107,7 +111,7 @@ package com.levels
 			addUpPart();
 			loadSounds();
 			isPaused = false;
-			removeLoadingScreen();
+			//removeLoadingScreen();
 		}
 		
 		private function _mouseWheel(event:MouseEvent):void {
@@ -119,6 +123,7 @@ package com.levels
 		
 		public function addBackground(imageName:String = "", imageURL:String = ""):void
 		{
+			//view.loadManager.onLoadComplete.add(handleLoadComplete);
 			bg = new CitrusSprite(imageName, {view: imageURL});
 			bg.parallaxX = 1;
 			add(bg);
@@ -126,12 +131,14 @@ package com.levels
 		
 		public function addBackgroundInsanity(imageName:String = "", imageURL:String = ""):void
 		{
+			arrayOfInanitysParties = new Array();
 			bgInsanity = new CitrusSprite(imageName, {view: imageURL});
 			bgInsanity.parallaxX = 1;
 			add(bgInsanity);
 			
 			displayBgInsanity = view.getArt(bgInsanity) as DisplayObject;
 			displayBgInsanity.alpha = 0;
+			arrayOfInanitysParties.push(displayBgInsanity);
 			//TestDo.alpha = 0;
 			//eaze((TestDo).to(1, {alpha:1}).to(0, {alpha:1});
 		}
@@ -142,10 +149,18 @@ package com.levels
 			upImage.parallaxX = imageParallaxX;
 			upImage.parallaxY = imageParallaxY;
 			add(upImage);
+		}
+		
+		public function addUpPartInsanity(imageURL:String = "", imageParallaxX:Number = 1, imageParallaxY:Number = 1):void
+		{
+			upImageInsanity = new CitrusSprite(ImageConstants.UP_PART_NAME, {view: imageURL});
+			upImageInsanity.parallaxX = imageParallaxX;
+			upImageInsanity.parallaxY = imageParallaxY;
+			add(upImageInsanity);
 			
-			//var TestDo:DisplayObject = view.getArt(upImage) as DisplayObject;
-			//TestDo.filters
-			//eaze((TestDo).to(1, {alpha:1}).to(0, {alpha:1});
+			displayUpImageInsanity = view.getArt(upImageInsanity) as DisplayObject;
+			displayUpImageInsanity.alpha = 0;
+			arrayOfInanitysParties.push(displayUpImageInsanity);
 		}
 		
 		/*override protected function loadSounds():void
@@ -165,8 +180,7 @@ package com.levels
 			if(heightBound <= stage.stageHeight){
 				heightBound = stage.stageHeight;
 			}
-			trace(widthBound, heightBound);
-			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, widthBound, heightBound), new Point(.25, .05));
+			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, widthBound, heightBound), new Point(.25, .20));
 			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			view.camera.allowZoom = true;
 			//view.camera.boundsMode = ACitrusCamera.BOUNDS_MODE_ADVANCED;
@@ -202,7 +216,7 @@ package com.levels
 				box2D.world.Step(1/30, 10, 10);
 				
 				ticks++;
-				if(ticks >= _ce.stage.frameRate){
+				if(ticks >= ASharedObject.getInstance().getCitrusEngineRef().stage.frameRate){
 					ticks = 0;
 					seconds++;
 				}
@@ -222,8 +236,10 @@ package com.levels
 				hero.rotation = 0;
 				isInverted = false;
 			}*/
+			var widthBound:int = _levelSWF.width;
+			var heightBound:int = _levelSWF.height;
 			view.camera.rotate(Math.PI);
-			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new Point(.25, .05));
+			view.camera.setUp(hero, new Point(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, widthBound, heightBound), new Point(.25, .20));
 			//setUpCamera();
 			//view.camera.setUp(hero, new MathVector(stage.stageWidth/2, stage.stageHeight/2), new Rectangle(0, 0, 1550, 1500), new MathVector(.25, .05));
 			//trace("Invertendo tudo" + box2D.world.GetGravity().y);
@@ -235,8 +251,13 @@ package com.levels
 		
 		public function updateInsanityBackground(insanityAlpha:Number):void
 		{
-			if(displayBgInsanity){
-				displayBgInsanity.alpha = insanityAlpha;
+			if(arrayOfInanitysParties){
+				for (var i:int = 0; i < arrayOfInanitysParties.length; i++) 
+				{
+					if(arrayOfInanitysParties[i]){
+						arrayOfInanitysParties[i].alpha = insanityAlpha;
+					}
+				}
 			}
 		}
 		

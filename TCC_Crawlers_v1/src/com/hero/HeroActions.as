@@ -11,9 +11,10 @@ package com.hero
 		public static var JUMP:String = "jump";
 		public static var INVERT:String = "invert";
 		public static var ACTION:String = "action";
-		public static var HIGH_FLASHLIGHT:String = "camera";
+		public static var HIGH_FLASHLIGHT:String = "highflash";
 		public static var FLASHLIGHT:String = "flashlight";
 		public static var BACKPACK:String = "backpack";
+		public static var CLIMB:String = "climb";
 		
 		public static var LEFT_KEY:int = Keyboard.A;
 		public static var RIGHT_KEY:int = Keyboard.D;
@@ -23,6 +24,7 @@ package com.hero
 		public static var HIGH_FLASHLIGHT_KEY:int = Keyboard.X;
 		public static var FLASHLIGHT_KEY:int = Keyboard.SHIFT;
 		public static var BACKPACK_KEY:int = Keyboard.P;
+		public static var CLIMB_KEY:int = Keyboard.W;
 		
 		public static var actionsDic:Dictionary;
 		

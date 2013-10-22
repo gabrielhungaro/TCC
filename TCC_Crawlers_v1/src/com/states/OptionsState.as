@@ -1,5 +1,6 @@
 package com.states
 {
+	import com.data.ASharedObject;
 	import com.greensock.TweenMax;
 	import com.hero.HeroActions;
 	
@@ -8,7 +9,6 @@ package com.states
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
-	import flash.text.TextField;
 	import flash.utils.Dictionary;
 	
 	import citrus.input.controllers.Keyboard;
@@ -24,47 +24,84 @@ package com.states
 		private var keyboard:Keyboard;
 		private var actionsDic:Dictionary = new Dictionary();
 		private var arrayOfTextFields:Array = [];
+		private var optionStatus:String;
+		private const STATE_NORMAL:String = "normal";
+		private const STATE_CONFIGURATION:String = "configuration";
 		public function OptionsState()
 		{
+			
+			optionStatus = STATE_NORMAL;
+			this.configurationOptions.visible = false;
+			actionsDic = ASharedObject.getInstance().getActionsDic();
+			
 			this.btnBack.addEventListener(MouseEvent.CLICK, onClickBack);
 			this.btnBack.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.btnBack.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			this.btnBack.buttonMode = true;
 			
-			this.btnOk.addEventListener(MouseEvent.CLICK, onClickOk);
-			this.btnOk.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			this.btnOk.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			this.btnOk.buttonMode = true;
+			this.btnConfirm.addEventListener(MouseEvent.CLICK, onClickOk);
+			this.btnConfirm.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.btnConfirm.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.btnConfirm.buttonMode = true;
 			
-			this.btnEffects.addEventListener(MouseEvent.CLICK, onClickEffects);
-			this.btnEffects.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			this.btnEffects.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			this.btnEffects.buttonMode = true;
+			if(ASharedObject.getInstance().getSfx()){
+				this.normalOptions.btnSfxOn.gotoAndStop("on");
+				this.normalOptions.btnSfxOff.gotoAndStop("off");
+			}else{
+				this.normalOptions.btnSfxOn.gotoAndStop("off");
+				this.normalOptions.btnSfxOff.gotoAndStop("on");
+			}
 			
-			this.btnSound.addEventListener(MouseEvent.CLICK, onClickSound);
-			this.btnSound.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			this.btnSound.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			this.btnSound.buttonMode = true;
+			this.normalOptions.btnSfxOn.addEventListener(MouseEvent.CLICK, onClickSfxOn);
+			this.normalOptions.btnSfxOn.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.normalOptions.btnSfxOn.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.normalOptions.btnSfxOn.buttonMode = true;
+			this.normalOptions.btnSfxOff.addEventListener(MouseEvent.CLICK, onClickSfxOff);
+			this.normalOptions.btnSfxOff.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.normalOptions.btnSfxOff.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.normalOptions.btnSfxOff.buttonMode = true;
 			
-			this.btnFullScreen.addEventListener(MouseEvent.CLICK, onClickFullScreen);
-			this.btnFullScreen.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			this.btnFullScreen.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			this.btnFullScreen.buttonMode = true;
+			if(ASharedObject.getInstance().getSound()){
+				this.normalOptions.btnSoundOn.gotoAndStop("on");
+				this.normalOptions.btnSoundOff.gotoAndStop("off");
+			}else{
+				this.normalOptions.btnSoundOn.gotoAndStop("off");
+				this.normalOptions.btnSoundOff.gotoAndStop("on");
+			}
 			
-			this.btnScaleMode.addEventListener(MouseEvent.CLICK, onClickScaleMode);
-			this.btnScaleMode.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-			this.btnScaleMode.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.normalOptions.btnSoundOn.addEventListener(MouseEvent.CLICK, onClickSoundOn);
+			this.normalOptions.btnSoundOn.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.normalOptions.btnSoundOn.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.normalOptions.btnSoundOn.buttonMode = true;
+			this.normalOptions.btnSoundOff.addEventListener(MouseEvent.CLICK, onClickSoundOff);
+			this.normalOptions.btnSoundOff.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.normalOptions.btnSoundOff.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.normalOptions.btnSoundOff.buttonMode = true;
+			
+			this.normalOptions.btnFullScreen.addEventListener(MouseEvent.CLICK, onClickFullScreen);
+			this.normalOptions.btnFullScreen.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.normalOptions.btnFullScreen.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.normalOptions.btnFullScreen.buttonMode = true;
+			
+			this.normalOptions.btnConfiguration.addEventListener(MouseEvent.CLICK, onClickConfiguration);
+			this.normalOptions.btnConfiguration.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			this.normalOptions.btnConfiguration.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			this.normalOptions.btnConfiguration.buttonMode = true;
+			
+			//this.btnScaleMode.addEventListener(MouseEvent.CLICK, onClickScaleMode);
+			//this.btnScaleMode.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			//this.btnScaleMode.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
 			//this.btnScaleMode.buttonMode = true;
 			
 			fillArrayOfActionObjects();
 			
-			for (var i:int = 0; i < this.numChildren; i++) 
+			/*for (var i:int = 0; i < this.configurationOptions.numChildren; i++) 
 			{
-				if(this.getChildAt(i) is TextField){
-					this.getChildAt(i).addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown)
-					arrayOfTextFields.push(this.getChildAt(i));
+				if(this.configurationOptions.getChildAt(i) is TextField){
+					this.configurationOptions.getChildAt(i).addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown)
+					arrayOfTextFields.push(this.configurationOptions.getChildAt(i));
 				}
-			}
+			}*/
 		}
 		
 		private function fillArrayOfActionObjects():void
@@ -78,21 +115,35 @@ package com.states
 				objectAction.key = HeroActions.ArrayOfActionKeys[i];
 				arrayActionKeys.push(objectAction);
 			}*/
-			actionsDic[HeroActions.LEFT] = HeroActions.LEFT_KEY;
-			actionsDic[HeroActions.RIGHT] = HeroActions.RIGHT_KEY;
-			actionsDic[HeroActions.JUMP] = HeroActions.JUMP_KEY;
-			actionsDic[HeroActions.INVERT] = HeroActions.INVERT_KEY;
-			actionsDic[HeroActions.ACTION] = HeroActions.ACTION_KEY;
-			actionsDic[HeroActions.HIGH_FLASHLIGHT] = HeroActions.HIGH_FLASHLIGHT_KEY;
-			actionsDic[HeroActions.FLASHLIGHT] = HeroActions.FLASHLIGHT_KEY;
-			actionsDic[HeroActions.BACKPACK] = HeroActions.BACKPACK_KEY;
+			
+			this.configurationOptions.right.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			arrayOfTextFields.push(this.configurationOptions.right);
+			this.configurationOptions.left.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			arrayOfTextFields.push(this.configurationOptions.left);
+			this.configurationOptions.jump.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			arrayOfTextFields.push(this.configurationOptions.jump);
+			this.configurationOptions.highflash.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			arrayOfTextFields.push(this.configurationOptions.highflash);
+			this.configurationOptions.invert.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			arrayOfTextFields.push(this.configurationOptions.invert);
+			
+			for (var action:String in actionsDic) {
+				var value:uint = actionsDic[action];
+				var name:String = action;
+				trace(actionsDic[name], name);
+				var keyName:String = convertCodeToChar(actionsDic[name]);
+				convertCodeToChar(actionsDic[name]);
+				if(this.configurationOptions.getChildByName(name)){
+					Object(this.configurationOptions.getChildByName(name)).textField.text = keyName;
+				}
+			}
 		}
 		
 		protected function onKeyDown(event:KeyboardEvent):void
 		{
 			var actionName:String = event.currentTarget.name;
-			var keyName:String;
-			if(event.keyCode){
+			var keyName:String = convertCodeToChar(event.keyCode);
+			/*if(event.keyCode){
 				keyName = String.fromCharCode(event.charCode).toUpperCase();
 			}
 			if(event.keyCode == Keyboard.SHIFT){
@@ -118,17 +169,47 @@ package com.states
 			}
 			if(event.keyCode == Keyboard.DOWN){
 				keyName = "DOWN";
-			}
+			}*/
 			for (var i:int = 0; i < arrayOfTextFields.length; i++) 
 			{
-				if(arrayOfTextFields[i].text == keyName){
-					arrayOfTextFields[i].text = "-"
+				if(arrayOfTextFields[i].textField.text == keyName){
+					arrayOfTextFields[i].textField.text = "-"
 				}
 			}
-			event.currentTarget.text = keyName;
+			event.currentTarget.textField.text = keyName;
 			verifyIfExistsAction(actionName, event.keyCode);
 			//trace("arrayOfActions: " + arrayOfActions);
 			//trace("arrayOfKeys: " + arrayOfKeys);
+		}
+		
+		private function convertCodeToChar(code:uint):String
+		{
+			var char:String = String.fromCharCode(code).toUpperCase();
+			if(code == Keyboard.SHIFT){
+				char = "SHIFT";
+			}
+			if(code == Keyboard.CTRL){
+				char = "CTRL";
+			}
+			if(code == Keyboard.SPACE){
+				char = "SPACE";
+			}
+			if(code == Keyboard.ENTER){
+				char = "ENTER";
+			}
+			if(code == Keyboard.LEFT){
+				char = "LEFT";
+			}
+			if(code == Keyboard.RIGHT){
+				char = "RIGHT";
+			}
+			if(code == Keyboard.UP){
+				char = "UP";
+			}
+			if(code == Keyboard.DOWN){
+				char = "DOWN";
+			}
+			return char;
 		}
 		
 		private function verifyIfExistsAction(actionName:String, keyCode:uint):void
@@ -169,7 +250,7 @@ package com.states
 				//trace(value, name);
 				keyboard.addKeyAction(name, value, 0);
 			}
-			
+			ASharedObject.getInstance().setActionsDic(actionsDic);
 			/*for (var i:int = 0; i < arrayActionKeys.length; i++) 
 			{
 				if(arrayActionKeys[i].action == arrayOfActions[i]){
@@ -178,15 +259,36 @@ package com.states
 			}*/
 		}
 		
-		protected function onClickEffects(event:MouseEvent):void
+		protected function onClickSfxOn(event:MouseEvent):void
 		{
-			SoundManager.getInstance().getGroup(CitrusSoundGroup.SFX).mute = !SoundManager.getInstance().getGroup(CitrusSoundGroup.SFX).mute;
+			SoundManager.getInstance().getGroup(CitrusSoundGroup.SFX).mute = false;
+			ASharedObject.getInstance().setSfx(true);
+			this.normalOptions.btnSfxOn.gotoAndStop("on");
+			this.normalOptions.btnSfxOff.gotoAndStop("off");
 		}
 		
-		protected function onClickSound(event:MouseEvent):void
+		protected function onClickSfxOff(event:MouseEvent):void
 		{
-			SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute = !SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute;
-			this.btnSound.gotoAndStop(2);
+			SoundManager.getInstance().getGroup(CitrusSoundGroup.SFX).mute = true;
+			ASharedObject.getInstance().setSfx(false);
+			this.normalOptions.btnSfxOn.gotoAndStop("off");
+			this.normalOptions.btnSfxOff.gotoAndStop("on");
+		}
+		
+		protected function onClickSoundOn(event:MouseEvent):void
+		{
+			SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute = false;
+			ASharedObject.getInstance().setSound(true);
+			this.normalOptions.btnSoundOn.gotoAndStop("on");
+			this.normalOptions.btnSoundOff.gotoAndStop("off");
+		}
+		
+		protected function onClickSoundOff(event:MouseEvent):void
+		{
+			SoundManager.getInstance().getGroup(CitrusSoundGroup.BGM).mute = true;
+			ASharedObject.getInstance().setSound(false);
+			this.normalOptions.btnSoundOn.gotoAndStop("off");
+			this.normalOptions.btnSoundOff.gotoAndStop("on");
 		}
 		
 		protected function onClickFullScreen(event:MouseEvent):void
@@ -194,12 +296,20 @@ package com.states
 			if(stage.displayState == StageDisplayState.NORMAL){
 				stage.displayState = StageDisplayState.FULL_SCREEN;
 				stage.fullScreenSourceRect = new Rectangle(0,0,stage.stageWidth,stage.stageHeight);
-				this.btnFullScreen.gotoAndStop(2);
+				this.normalOptions.btnFullScreen.gotoAndStop(2);
 			}else{
-				this.btnFullScreen.gotoAndStop(1);
+				this.normalOptions.btnFullScreen.gotoAndStop(1);
 				stage.displayState = StageDisplayState.NORMAL;
 				stage.fullScreenSourceRect = new Rectangle(0,0,stage.stageWidth,stage.stageHeight);
 			}
+		}
+		
+		
+		protected function onClickConfiguration(event:MouseEvent):void
+		{
+			this.configurationOptions.visible = true;
+			this.normalOptions.visible = false;
+			optionStatus = STATE_CONFIGURATION;
 		}
 		
 		protected function onClickScaleMode(event:MouseEvent):void
@@ -218,7 +328,18 @@ package com.states
 		
 		protected function onClickBack(event:MouseEvent):void
 		{
-			this.closeFunction();
+			if(optionStatus == STATE_NORMAL){
+				this.closeFunction();
+			}else if(optionStatus == STATE_CONFIGURATION){
+				closeConfiguration();
+			}
+		}
+		
+		private function closeConfiguration():void
+		{
+			this.configurationOptions.visible = false;
+			this.normalOptions.visible = true;
+			optionStatus = STATE_NORMAL;
 		}
 		
 		protected function onMouseOver(event:MouseEvent):void
