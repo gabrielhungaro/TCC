@@ -28,7 +28,7 @@ package com
 		private var seconds:int;
 		private var secondsWithTorch:int = 5;
 		private var timerWithCamera:int = 1;
-		private var ALPHA:Number = .8;
+		private var ALPHA:Number = .98;
 		private var lightType:String = NORMAL_LIGHT;
 		private var NORMAL_LIGHT:String = "normal";
 		private var CAMERA_LIGHT:String = "camera";

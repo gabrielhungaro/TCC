@@ -20,7 +20,7 @@ package com.objects
 		{
 			trace("Entrou na porta");
 			if(contact.GetFixtureA().GetBody().GetUserData() is MyHero){
-				//_ce.levelManager.nextLevel();
+				contact.GetFixtureA().GetBody().GetUserData().setInLader(true);
 			}
 		}
 	}

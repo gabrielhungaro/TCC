@@ -21,7 +21,7 @@ package com.hero
 				this.y = _camPoint.y - hero.y;
 			}else{*/
 				this.x = hero.x - hero.width/2 - hero.getCamPos().x;
-				this.y = hero.y - hero.height/2 - hero.getCamPos().y;		
+				this.y = hero.y - hero.height/2 - hero.getCamPos().y;
 			//}
 		}
 		
@@ -37,7 +37,7 @@ package com.hero
 			/*this.x = hero.x - hero.width/2 - hero.getCamPos().x;
 			this.y = hero.y - hero.height/2 - hero.getCamPos().y;*/
 			var currentFrame:int = (this.asset.totalFrames * insanity) / insanityLimit;
-			trace("[ SHADOW ] - CURRENTFRAME: " + currentFrame);
+			//trace("[ SHADOW ] - CURRENTFRAME: " + currentFrame);
 			this.asset.gotoAndStop(currentFrame);
 		}
 		

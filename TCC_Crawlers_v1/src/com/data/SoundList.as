@@ -9,6 +9,10 @@ package com.data
 		public static const SOUND_TUTORIAL1_BACKGORUND:Sound_Background1 = new Sound_Background1();
 		public static const SOUND_MAIN_MENU_BACKGROUND_NAME:String = "Sound_MainMenu";
 		public static const SOUND_MAIN_MENU_BACKGROUND:Sound_MainMenu = new Sound_MainMenu();
+		public static const SOUND_LEVEL1_BACKGROUND_NAME:String = "Sound_Level1";
+		public static const SOUND_LEVEL1_BACKGROUND:Sound_Level1 = new Sound_Level1();
+		public static const SOUND_INVERT_WORLD_BACKGROUND_NAME:String = "Sound_InvertWorld";
+		public static const SOUND_INVERT_WORLD_BACKGROUND:Sound_InvertWorld = new Sound_InvertWorld();
 		
 		public static const SFX_NORMAL_WALK_NAME:String = "Sfx_NormalWalk";
 		public static const SFX_NORMAL_WALK:Sfx_NormalWalk = new Sfx_NormalWalk();
@@ -56,8 +60,10 @@ package com.data
 		
 		private function loadSounds():void
 		{
-			SoundManager.getInstance().addSound(SOUND_TUTORIAL1_BACKGROUND_NAME, { sound:SOUND_TUTORIAL1_BACKGORUND, timesToPlay:1, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.BGM } );
-			SoundManager.getInstance().addSound(SOUND_MAIN_MENU_BACKGROUND_NAME, { sound:SOUND_MAIN_MENU_BACKGROUND, timesToPlay:1, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.BGM } );
+			SoundManager.getInstance().addSound(SOUND_TUTORIAL1_BACKGROUND_NAME, { sound:SOUND_TUTORIAL1_BACKGORUND, timesToPlay:0, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.BGM } );
+			SoundManager.getInstance().addSound(SOUND_MAIN_MENU_BACKGROUND_NAME, { sound:SOUND_MAIN_MENU_BACKGROUND, timesToPlay:0, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.BGM } );
+			SoundManager.getInstance().addSound(SOUND_LEVEL1_BACKGROUND_NAME, { sound:SOUND_LEVEL1_BACKGROUND, timesToPlay:0, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.BGM } );
+			SoundManager.getInstance().addSound(SOUND_INVERT_WORLD_BACKGROUND_NAME, { sound:SOUND_INVERT_WORLD_BACKGROUND, timesToPlay:0, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.BGM } );
 			
 			SoundManager.getInstance().addSound(SFX_NORMAL_WALK_NAME, { sound:SFX_NORMAL_WALK, timesToPlay:0, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.SFX } );
 			SoundManager.getInstance().addSound(SFX_NORMAL_JUMP_NAME, { sound:SFX_NORMAL_JUMP, timesToPlay:1, triggerSoundComplete:true,triggerRepeatComplete:true, group:CitrusSoundGroup.SFX } );

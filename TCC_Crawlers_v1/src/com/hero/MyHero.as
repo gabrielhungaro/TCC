@@ -79,6 +79,7 @@ package com.hero
 		private var _acceleration:Number = 1;
 		private var widthBound:Number;
 		private var heightBound:Number;
+		private var inLader:Boolean;
 		
 		public function MyHero(name:String, params:Object=null)
 		{
@@ -334,6 +335,10 @@ package com.hero
 			
 			updateShadowPosition();
 			
+			if(backpack){
+				backpack.update();
+			}
+			
 			
 			// we get a reference to the actual velocity vector
 			var velocity:b2Vec2 = _body.GetLinearVelocity();
@@ -409,6 +414,7 @@ package com.hero
 					//Player just stopped moving the hero this tick.
 				else if (!moveKeyPressed && _playerMovingHero)
 				{
+					SoundManager.getInstance().stopSound(SoundList.SFX_NORMAL_WALK_NAME);
 					_playerMovingHero = false;
 					_fixture.SetFriction(_friction); //Add friction so that he stops running
 				}
@@ -463,6 +469,8 @@ package com.hero
 				backpack.setArrayOfItens(arrayTeste);
 				backpack.setCloseFunction(closeBackpack);
 				backpack.init();
+			}else{
+				closeBackpack();
 			}
 		}
 		
@@ -480,8 +488,15 @@ package com.hero
 		private function updateShadowPosition():void
 		{
 			//shadow.x = this.x - this.width/2 - _cam.transformMatrix.transformPoint(new Point(0,0)).x;
-			shadowPos.x = this.x;
-			shadowPos.y = this.y + this.height/2;
+			if(isInverted){
+				shadowPos.x = this.x;
+				shadowPos.y = this.y - this.height/2;
+				shadow.scaleY = -1;
+			}else{
+				shadow.scaleY = 1;
+				shadowPos.x = this.x;
+				shadowPos.y = this.y + this.height/2;
+			}
 			shadow.x = shadowPos.x;// + _cam.transformMatrix.transformPoint(new Point(0,0)).x;
 			shadow.y = shadowPos.y;// + _cam.transformMatrix.transformPoint(new Point(0,0)).y;
 			
@@ -569,7 +584,9 @@ package com.hero
 					this.rotation = 180;
 					isInverted = true;
 					SoundManager.getInstance().playSound(SoundList.SFX_INVERT_WORLD_NAME);
+					SoundManager.getInstance().playSound(SoundList.SOUND_INVERT_WORLD_BACKGROUND_NAME);
 				}else{
+					SoundManager.getInstance().stopSound(SoundList.SOUND_INVERT_WORLD_BACKGROUND_NAME);
 					SoundManager.getInstance().playSound(SoundList.SFX_REVERT_WORLD_NAME);
 					this.rotation = 0;
 					isInverted = false;
@@ -581,13 +598,13 @@ package com.hero
 		public function useCamera():void
 		{
 			SoundManager.getInstance().playSound(SoundList.SFX_HIGH_FLASHLIGHT_NAME);
-			addInsanity(10);
-			insanity += 10;
+			setInsanity(-5);
+			insanity -= 5;
 			cameraUsed = true;
 			fog.useCamera();
 		}
 		
-		public function addInsanity(value:int):void
+		public function setInsanity(value:int):void
 		{
 			insanity += value;
 		}
@@ -761,6 +778,16 @@ package com.hero
 		public function setLevelHeight(value:Number):void
 		{
 			heightBound = value;
+		}
+		
+		public function setInLader(value:Boolean):void
+		{
+			inLader = value;
+		}
+		
+		public function getInLader():Boolean
+		{
+			return inLader;
 		}
 	}
 }

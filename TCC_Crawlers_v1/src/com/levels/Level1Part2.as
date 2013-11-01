@@ -39,7 +39,7 @@ package com.levels
 		override protected function loadSounds():void
 		{
 			super.loadSounds();
-			SoundManager.getInstance().playSound(SoundList.SOUND_TUTORIAL1_BACKGROUND_NAME);
+			SoundManager.getInstance().playSound(SoundList.SOUND_LEVEL1_BACKGROUND_NAME);
 		}
 	}
 }

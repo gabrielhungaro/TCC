@@ -45,7 +45,7 @@ package com
 		{
 			if(contact.GetFixtureA().GetBody().GetUserData() is MyHero){
 				trace("hitado pelo morcego");
-				contact.GetFixtureA().GetBody().GetUserData().addInsanity(15);
+				contact.GetFixtureA().GetBody().GetUserData().setInsanity(15);
 			}
 		}
 		

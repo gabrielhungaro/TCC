@@ -45,7 +45,7 @@ package com.states
 		
 		protected function onClickPlay(event:MouseEvent):void
 		{
-			_ce.levelManager.gotoLevel(StateManager.STATE_TUTORIAL_PT1);
+			this.mainMenuAsset.gotoAndPlay(2);
 		}
 		
 		protected function onClickExit(event:MouseEvent):void
@@ -88,6 +88,11 @@ package com.states
 		override public function update(timeDelta:Number):void
 		{
 			super.update(timeDelta);
+			if(mainMenuAsset){
+				if(mainMenuAsset.currentFrame == mainMenuAsset.totalFrames){
+					_ce.levelManager.gotoLevel(StateManager.STATE_TUTORIAL_PT1);
+				}
+			}
 		}
 		
 		override public function destroy():void

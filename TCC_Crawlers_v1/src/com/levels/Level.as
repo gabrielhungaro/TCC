@@ -101,7 +101,7 @@ package com.levels
 			heightBound = _levelSWF.height;
 			
 			box2D = new Box2D("box2D");
-			box2D.visible = true;
+			box2D.visible = false;
 			add(box2D);
 			
 			addBackground();
