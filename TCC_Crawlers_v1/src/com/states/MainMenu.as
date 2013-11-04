@@ -10,9 +10,6 @@ package com.states
 	public class MainMenu extends AState
 	{
 		private var mainMenuAsset:MainMenuAsset;
-		private var btnStart:BtnStartAsset;
-		private var btnOptions:BtnOptionsAsset;
-		private var btnCredits:BtnCreditsAsset;
 		private var optionScreen:OptionsState;
 		
 		public function MainMenu()
@@ -27,25 +24,34 @@ package com.states
 			mainMenuAsset = new MainMenuAsset();
 			this.addChild(mainMenuAsset);
 			
-			mainMenuAsset.btnPlay.addEventListener(MouseEvent.CLICK, onClickPlay);
+			mainMenuAsset.btnPlay.buttonHit.alpha = 0;
+			mainMenuAsset.btnPlay.buttonHit.addEventListener(MouseEvent.CLICK, onClickPlay);
 			mainMenuAsset.btnPlay.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			mainMenuAsset.btnPlay.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			mainMenuAsset.btnPlay.buttonMode = true;
+			mainMenuAsset.btnPlay.buttonHit.buttonMode = true;
 			
-			mainMenuAsset.btnOptions.addEventListener(MouseEvent.CLICK, onClickOptions);
+			mainMenuAsset.btnOptions.buttonHit.alpha = 0;
+			mainMenuAsset.btnOptions.buttonHit.addEventListener(MouseEvent.CLICK, onClickOptions);
 			mainMenuAsset.btnOptions.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			mainMenuAsset.btnOptions.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			mainMenuAsset.btnOptions.buttonMode = true;
+			mainMenuAsset.btnOptions.buttonHit.buttonMode = true;
 			
-			mainMenuAsset.btnExit.addEventListener(MouseEvent.CLICK, onClickExit);
+			mainMenuAsset.btnExit.buttonHit.alpha = 0;
+			mainMenuAsset.btnExit.buttonHit.addEventListener(MouseEvent.CLICK, onClickExit);
 			mainMenuAsset.btnExit.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			mainMenuAsset.btnExit.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-			mainMenuAsset.btnExit.buttonMode = true;
+			mainMenuAsset.btnExit.buttonHit.buttonMode = true;
+			
+			mainMenuAsset.btnCredits.buttonHit.alpha = 0;
+			mainMenuAsset.btnCredits.buttonHit.addEventListener(MouseEvent.CLICK, onClickCredits);
+			mainMenuAsset.btnCredits.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+			mainMenuAsset.btnCredits.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+			mainMenuAsset.btnCredits.buttonHit.buttonMode = true;
 		}
 		
 		protected function onClickPlay(event:MouseEvent):void
 		{
-			this.mainMenuAsset.gotoAndPlay(2);
+			ASharedObject.getInstance().getCitrusEngineRef().levelManager.gotoLevel(StateManager.STATE_TUTORIAL_PT1);
 		}
 		
 		protected function onClickExit(event:MouseEvent):void
@@ -55,12 +61,12 @@ package com.states
 		
 		protected function onClickOptions(event:MouseEvent):void
 		{
-			optionScreen = new OptionsState();
-			optionScreen.setCloseFunction(closeOptions);
-			optionScreen.x = optionScreen.width/2;
-			optionScreen.y = optionScreen.height/2;
-			optionScreen.setKeyboard(ASharedObject.getInstance().getKeyboard());
-			this.addChild(optionScreen);
+			ASharedObject.getInstance().getCitrusEngineRef().levelManager.gotoLevel(StateManager.STATE_OPTIONS);
+		}
+		
+		protected function onClickCredits(event:MouseEvent):void
+		{
+			ASharedObject.getInstance().getCitrusEngineRef().levelManager.gotoLevel(StateManager.STATE_CREDITS);
 		}
 		
 		private function closeOptions():void
@@ -88,11 +94,11 @@ package com.states
 		override public function update(timeDelta:Number):void
 		{
 			super.update(timeDelta);
-			if(mainMenuAsset){
+			/*if(mainMenuAsset){
 				if(mainMenuAsset.currentFrame == mainMenuAsset.totalFrames){
 					_ce.levelManager.gotoLevel(StateManager.STATE_TUTORIAL_PT1);
 				}
-			}
+			}*/
 		}
 		
 		override public function destroy():void

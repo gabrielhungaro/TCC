@@ -12,6 +12,7 @@ package com.states
 		
 		public function NotebookState()
 		{
+			ASharedObject.getInstance().setIsPaused(true);
 			this.btnBack.addEventListener(MouseEvent.CLICK, onClickBack);
 			this.btnBack.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			this.btnBack.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
@@ -46,6 +47,7 @@ package com.states
 		
 		protected function onClickExit(event:MouseEvent):void
 		{
+			this.closeFunction(true);
 			ASharedObject.getInstance().getCitrusEngineRef().levelManager.gotoLevel(StateManager.STATE_MENU);
 		}
 		
@@ -81,6 +83,7 @@ package com.states
 		
 		protected function onClickBack(event:MouseEvent):void
 		{
+			ASharedObject.getInstance().setIsPaused(false);
 			this.closeFunction();
 		}
 		

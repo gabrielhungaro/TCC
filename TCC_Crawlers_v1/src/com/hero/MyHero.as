@@ -369,7 +369,7 @@ package com.hero
 					invertWorld();
 				}
 				
-				if(_ce.input.justDid("fly", inputChannel))
+				/*if(_ce.input.justDid("fly", inputChannel))
 				{
 					//insert "start flying" code here
 				}
@@ -382,7 +382,7 @@ package com.hero
 					velocity.y = - flying_intensity * 150; //this is just an example application, it might not be as accurate as you'd want it to.
 					
 					//insert other "flying" code here
-				}
+				}*/
 				
 				if (_ce.input.justDid(HeroActions.RIGHT, inputChannel) && !_ducking)
 					SoundManager.getInstance().playSound(SoundList.SFX_NORMAL_WALK_NAME);

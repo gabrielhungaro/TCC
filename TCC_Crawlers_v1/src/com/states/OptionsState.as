@@ -2,7 +2,6 @@ package com.states
 {
 	import com.data.ASharedObject;
 	import com.greensock.TweenMax;
-	import com.hero.HeroActions;
 	
 	import flash.display.StageDisplayState;
 	import flash.display.StageScaleMode;

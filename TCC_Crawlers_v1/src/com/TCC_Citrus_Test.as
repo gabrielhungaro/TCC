@@ -4,9 +4,6 @@ package com
 	import com.levels.Level1Part1;
 	import com.levels.Level1Part2;
 	import com.levels.Level1Part3;
-	import com.levels.Level2State;
-	import com.levels.Level3State;
-	import com.levels.Level4State;
 	import com.levels.TutorialPart1State;
 	import com.levels.TutorialPart2State;
 	import com.levels.TutorialPart3State;
@@ -14,6 +11,7 @@ package com
 	import com.states.AState;
 	import com.states.Credits;
 	import com.states.MainMenu;
+	import com.states.OptionsOffGameState;
 	
 	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
@@ -55,7 +53,14 @@ package com
 			levelManager = new LevelManager(AState);
 			levelManager.applicationDomain = ApplicationDomain.currentDomain; 
 			levelManager.onLevelChanged.add(_onLevelChanged);
-			levelManager.levels = [MainMenu, Credits, [TutorialPart1State, Tutorial_part1Mc], [TutorialPart2State, Tutorial_part2Mc], [TutorialPart3State, Tutorial_part3Mc], [TutorialPart4State, Tutorial_part4Mc], [Level1Part1, Level1_Part1Mc], [Level1Part2, Level1_Part2Mc], [Level1Part3, Level1_Part3Mc]];
+			levelManager.levels = [MainMenu, Credits, OptionsOffGameState,
+									[TutorialPart1State, Tutorial_part1Mc],
+									[TutorialPart2State, Tutorial_part2Mc],
+									[TutorialPart3State, Tutorial_part3Mc],
+									[TutorialPart4State, Tutorial_part4Mc],
+									[Level1Part1, Level1_Part1Mc],
+									[Level1Part2, Level1_Part2Mc],
+									[Level1Part3, Level1_Part3Mc]];
 			levelManager.gotoLevel();
 			
 			//this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);

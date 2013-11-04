@@ -40,7 +40,6 @@ package com.levels
 		private var hero:MyHero;
 		public var box2D:Box2D;
 		
-		private var isPaused:Boolean = true;;
 		private var ticks:int;
 		private var seconds:int;
 		private var minutes:int;
@@ -114,7 +113,7 @@ package com.levels
 			
 			addUpPart();
 			loadSounds();
-			isPaused = false;
+			ASharedObject.getInstance().setIsPaused(false);
 			//removeLoadingScreen();
 		}
 		
@@ -214,7 +213,7 @@ package com.levels
 		
 		override public function update(timeDelta:Number):void
 		{
-			if(!isPaused){
+			if(!ASharedObject.getInstance().getIsPaused()){
 				super.update(timeDelta);
 				box2D.world.Step(1/30, 10, 10);
 				

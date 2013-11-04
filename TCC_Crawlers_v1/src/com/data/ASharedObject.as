@@ -18,6 +18,7 @@ package com.data
 		private var _actionsDic:Dictionary = new Dictionary();
 		private var _keyboard:Keyboard;
 		private var _ce:CitrusEngine;
+		private var _isPaused:Boolean = true;
 		
 		public static var okToCreate:Boolean;
 		public static var instance:ASharedObject;
@@ -132,5 +133,16 @@ package com.data
 		{
 			_ce = value;
 		}
+
+		public function getIsPaused():Boolean
+		{
+			return _isPaused;
+		}
+
+		public function setIsPaused(value:Boolean):void
+		{
+			_isPaused = value;
+		}
+
 	}
 }

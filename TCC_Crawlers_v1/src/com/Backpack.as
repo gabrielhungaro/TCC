@@ -1,6 +1,7 @@
 package com
 {
 	import com.data.ASharedObject;
+	import com.greensock.TweenLite;
 	import com.states.NotebookState;
 	import com.states.OptionsState;
 	
@@ -112,10 +113,13 @@ package com
 		{
 			notebook = new NotebookState();
 			notebook.setCloseFunction(closeNotebook);
+			notebook.y = -notebook.height/4;
+			notebook.scaleX = notebook.scaleY = 0; 
+			TweenLite.to(notebook, .5, {scaleX:1, scaleY:1});
 			this.addChild(notebook);
 		}
 		
-		private function closeNotebook():void
+		private function closeNotebook(exitAll:Boolean = false):void
 		{
 			notebook.destroy();
 			if(notebook){
@@ -123,13 +127,15 @@ package com
 					this.removeChild(notebook);
 				}
 			}
+			if(exitAll){
+				this.closeFunction();
+			}
 		}
 		
 		protected function onClickOptionsButton(event:MouseEvent):void
 		{
 			optionScreen = new OptionsState();
 			optionScreen.setCloseFunction(closeOptions);
-			optionScreen.setKeyboard(ASharedObject.getInstance().getKeyboard());
 			this.addChild(optionScreen);
 		}
 		
@@ -156,6 +162,11 @@ package com
 		}
 		
 		protected function onClickBack(event:MouseEvent):void
+		{
+			TweenLite.to(notebook, .5, {scaleX:0, scaleY:0, onComplete:completeCloseBackpack});
+		}
+		
+		private function completeCloseBackpack():void
 		{
 			this.closeFunction();
 		}

@@ -1,5 +1,6 @@
 package com.states
 {
+	import com.data.ASharedObject;
 	import com.greensock.TweenMax;
 	
 	import flash.events.MouseEvent;
@@ -27,7 +28,7 @@ package com.states
 		
 		protected function onClickBack(event:MouseEvent):void
 		{
-			_ce.levelManager.gotoLevel(StateManager.STATE_MENU);
+			ASharedObject.getInstance().getCitrusEngineRef().levelManager.gotoLevel(StateManager.STATE_MENU);
 		}
 		
 		protected function onMouseOver(event:MouseEvent):void
